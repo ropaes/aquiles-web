@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:aquiles="http://java.sun.com/jsf/composite/aquiles">
+
+<composite:interface>
+    <composite:attribute name="projectName" shortDescription="Nome do projeto que aparecerá no rodapé"
+                         required="true"/>
+    <composite:attribute name="projectVersion" shortDescription="Versão do projeto que aparecerá no rodapé"
+                         required="true"/>
+    <composite:attribute name="logoPath" shortDescription="Caminho da logomarca que será carregada no template"
+                         required="true"/>
+    <composite:attribute name="logoWidthExpanded"
+                         shortDescription="Largura da logomarca quando a barra de menu estiver expandida"
+                         default="25"/>
+    <composite:attribute name="logoHeightExpanded"
+                         shortDescription="Altura da logomarca quando a barra de menu estiver expandida"
+                         default="25"/>
+    <composite:attribute name="logoWidthCollapsed"
+                         shortDescription="Largura da logomarca quando a barra de menu estiver escondida"
+                         default="35"/>
+    <composite:attribute name="logoHeightCollapsed"
+                         shortDescription="Altura da logomarca quando a barra de menu estiver escondida"
+                         default="35"/>
+    <composite:attribute name="includeDropDownMessages"
+                         shortDescription="Habilita o componente DropDownMessages que irá mostrar mensagens do sistema ao usuário"
+                         default=""/>
+    <composite:attribute name="enableDropDownModules"
+                         shortDescription="Habilita o componente DropDownModules que irá mostrar os módulos do sistema"
+                         default="true"/>
+    <composite:attribute name="enableTextResizer"
+                         shortDescription="Habilita o componente text-resizer que aumenta ou diminui o tamanho do texto"
+                         default="true"/>
+    <composite:attribute name="copyrights"
+                         shortDescription="Mensagem que será mostrada no rodapé do layout. Ex: Todos os Direitos reservados a empresa ABC"
+                         required="true"/>
+    <composite:attribute name="includeSelectOneMenu"
+                         shortDescription="Caminho da página que contém o componente selectOneMenu que deverá ser renderizado"/>
+    <composite:attribute name="includeDropdownUserMenu"/>
+    <composite:attribute name="enableIncludeDropdownUserMenu" default="false"/>
+    <composite:attribute name="targetPageMeusDados" default="/core/index"/>
+    <composite:attribute name="actionListenerLogout" default="#{utilMB.doLogout}"
+                         method-signature="java.lang.String logout()"/>
+    <composite:attribute name="renderButtonMeusDados" default="true"/>
+    <composite:attribute name="imgCircle" default="true"/>
+    <composite:attribute name="includeUnderMenu"/>
+    <composite:attribute name="includeInputSearch"/>
+    <composite:attribute name="enableDropdownUserMenu" default="true"/>
+</composite:interface>
+<composite:implementation>
+    <h:body styleClass="hold-transition skin-#{utilMB.colorTemplate} sidebar-mini">
+
+        <f:metadata>
+            <f:event type="preRenderView"
+                     listener="#{utilMB.contextoUtil.setParamSession('aquiles-body-id',cc.clientId)}"/>
+        </f:metadata>
+
+        <h:outputText value="#{utilMB.autoCloseAlertMessage}" id="OUTPUTTEXT_AUTOCLOSEALERTMESSAGE_AQUILES"
+                      style="display: none"/>
+
+        <div class="wrapper">
+
+            <!-- Main Header -->
+            <header class="main-header">
+
+                <!-- Logo -->
+                <h:link outcome="/core/index" styleClass="logo">
+                    <!-- mini logo for sidebar mini 50x50 pixels -->
+                    <span class="logo-mini"><h:graphicImage
+                            name="#{cc.attrs.logoPath}" width="#{cc.attrs.logoWidthCollapsed}"
+                            height="#{cc.attrs.logoHeightCollapsed}"
+                            style="margin-top:4px" styleClass="#{cc.attrs.imgCircle?'img-circle':''}"/></span>
+                    <!-- logo for regular state and mobile devices -->
+                    <span class="logo-lg"><h:graphicImage
+                            name="#{cc.attrs.logoPath}" width="#{cc.attrs.logoWidthExpanded}"
+                            height="#{cc.attrs.logoHeightExpanded}"
+                            styleClass="#{cc.attrs.imgCircle?'img-circle':''}"/> #{cc.attrs.projectName}</span>
+                </h:link>
+
+                <!-- Header Navbar -->
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <!-- Sidebar toggle button-->
+                    <span class="visible-xs-block visible-sm-block"> <a href="#"
+                                                                        class="sidebar-toggle" data-toggle="offcanvas"
+                                                                        role="button"> <span
+                            class="sr-only">Toggle navigation</span>
+				</a>
+				</span>
+                    <!-- Navbar Right Menu -->
+                    <div class="navbar-custom-menu">
+
+                        <ul class="nav navbar-nav">
+                            <h:panelGroup rendered="#{not empty cc.attrs.includeSelectOneMenu}">
+                                <li class="dropdown convenio-select"><h:form>
+                                    <ui:include src="#{cc.attrs.includeSelectOneMenu}"/>
+                                </h:form></li>
+                            </h:panelGroup>
+
+                            <!-- Mensagens do sistema -->
+                            <h:panelGroup rendered="#{not empty cc.attrs.includeDropDownMessages}">
+                                <li class="dropdown messages-menu">
+                                    <ui:include src="#{cc.attrs.includeDropDownMessages}"/>
+                                </li>
+                            </h:panelGroup>
+
+                            <!-- Modulos -->
+                            <aquiles:dropdownModulesMenu rendered="#{cc.attrs.enableDropDownModules}"/>
+
+                            <!-- Informações do usuário logado -->
+                            <h:panelGroup rendered="#{cc.attrs.enableDropdownUserMenu}">
+                                <aquiles:dropdownUserMenu targetPageMeusDados="#{cc.attrs.targetPageMeusDados}"
+                                                         actionListenerLogout="#{cc.attrs.actionListenerLogout}"
+                                                         renderButtonMeusDados="#{cc.attrs.renderButtonMeusDados}">
+                                    <h:panelGroup rendered="#{cc.attrs.enableIncludeDropdownUserMenu}">
+                                        <ui:include src="#{cc.attrs.includeDropdownUserMenu}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{not cc.attrs.enableIncludeDropdownUserMenu}">
+                                        #{utilMB.subject.nome}
+                                        <small>#{utilMB.subject.perfil.sgPfl}</small>
+                                    </h:panelGroup>
+
+                                </aquiles:dropdownUserMenu>
+                            </h:panelGroup>
+                        </ul>
+                    </div>
+
+
+                    <aquiles:textresizer rendered="#{cc.attrs.enableTextResizer}"/>
+                </nav>
+                <div class="thinbar"/>
+            </header>
+
+            <!-- Sidebar menu -->
+            <aside class="main-sidebar">
+
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar">
+                    <h:panelGroup id="inputSearchPanelGroup">
+                        <c:if test="#{not empty cc.attrs.includeInputSearch}">
+                            <ui:include src="#{cc.attrs.includeInputSearch}"/>
+                        </c:if>
+                        <c:if test="#{empty cc.attrs.includeInputSearch}">
+                            <form action="#" method="get" class="sidebar-form">
+                                <div class="input-group">
+                                    <input type="text" name="q" class="form-control"
+                                           placeholder="Buscar ..."/> <span class="input-group-btn">
+							<button type="submit" name="search" id="search-btn"
+                                    class="btn btn-flat">
+								<i class="fa fa-search"></i>
+							</button>
+						</span>
+                                </div>
+                            </form>
+                        </c:if>
+                    </h:panelGroup>
+                    <!-- Sidebar Menu -->
+                    <aquiles:menu/>
+                    <ui:include src="#{cc.attrs.includeUnderMenu}"/>
+                </section>
+                <!-- /.sidebar -->
+            </aside>
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <aquiles:messages id="aquiles-messages"/>
+                <ui:insert name="content"/>
+            </div>
+            <!-- /.content-wrapper -->
+
+            <!-- Main Footer -->
+            <footer class="main-footer">
+                <!-- To the right -->
+                <div class="pull-right hidden-xs">#{cc.attrs.projectName}
+                    #{cc.attrs.projectVersion}</div>
+                <!-- Default to the left -->
+                #{cc.attrs.copyrights}
+            </footer>
+
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.1.4 -->
+        <h:outputScript name="third/plugins/jQuery/jQuery-2.1.4.min.js"/>
+
+        <!-- Bootstrap 3.3.5 -->
+        <h:outputScript name="third/bootstrap/js/bootstrap.min.js"/>
+
+
+        <h:outputScript name="third/plugins/slimScroll/jquery.slimscroll.min.js"/>
+
+        <!-- Datatable -->
+        <h:outputScript name="third/plugins/datatables/jquery.dataTables.min.js"/>
+        <h:outputScript
+                name="third/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"/>
+        <h:outputScript name="third/plugins/datatables/dataTables.bootstrap.min.js"/>
+
+        <!-- flot -->
+        <h:outputScript name="third/plugins/flot/jquery.flot.min.js"/>
+        <h:outputScript name="third/plugins/flot/jquery.flot.resize.min.js"/>
+        <h:outputScript name="third/plugins/flot/jquery.flot.pie.min.js"/>
+        <h:outputScript name="third/plugins/flot/jquery.flot.categories.min.js"/>
+
+        <h:outputScript name="third/plugins/textresizer/jquery.textresizer.js"/>
+
+        <h:outputScript library="javax.faces" name="jsf.js" target="head"/>
+
+        <!-- Datepicker -->
+        <h:outputScript name="third/plugins/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js"/>
+        <h:outputScript name="third/plugins/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.pt-BR.min.js"/>
+
+        <!-- Monitora a digitação do campo autocomplete -->
+        <h:outputScript name="third/plugins/typewatch/jquery.typewatch.js"/>
+
+        <!-- loading -->
+        <h:outputScript name="third/plugins/jquery-loading/jquery.loading.min.js"/>
+
+        <!-- jquery confirm -->
+        <h:outputScript name="third/plugins/jquery-confirm/jquery-confirm.min.js"/>
+
+        <!-- aquilesnote wysiwyg -->
+        <h:outputScript name="third/plugins/aquilesnote/aquilesnote.js"/>
+
+        <!-- AdminLTE App -->
+        <h:outputScript name="third/dist/js/app.min.js"/>
+        <h:outputScript name="third/dist/js/jquery.mask.min.js"/>
+        <h:outputScript name="js/aquiles.js"/>
+        <h:outputScript name="js/aquiles-core.js"/>
+
+        <composite:insertChildren/>
+
+    </h:body>
+</composite:implementation>
+</html>

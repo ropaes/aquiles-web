@@ -1,0 +1,162 @@
+body {
+    font-family: Tahoma;
+    font-size: 11px;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: Tahoma;
+}
+
+/* Inicio Mensagems */
+.alert-aquiles {
+    list-style: none;
+    padding: 0px;
+    min-width: 24%;
+    position: fixed;
+    top: 10px;
+    right: 0px;
+    z-index: 9999;
+    margin: 0 auto;
+}
+
+.alert-aquiles li {
+    padding: 15px;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-right: 10px;
+    border: 1px solid gray;
+    -webkit-box-shadow: -1px 1px 5px -1px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: -1px 1px 5px -1px rgba(0, 0, 0, 0.75);
+    box-shadow: -1px 1px 5px -1px rgba(0, 0, 0, 0.75);
+}
+
+.alert-aquiles .info {
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    color: #31708f;
+}
+
+.alert-aquiles .warn {
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+    color: #8a6d3b;
+}
+
+.alert-aquiles .danger {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    color: #a94442;
+}
+
+.autocomplete-datatable {
+    margin-bottom: 0px !important;
+}
+
+.autocomplete-datatable a:hover {
+    cursor: pointer;
+    color: red;
+}
+
+.autocomplete-container {
+    overflow: auto;
+    max-height: 200px;
+    width: 100%;
+    -webkit-box-shadow: 0px 3px 13px -3px rgba(0, 0, 0, 0.57);
+    -moz-box-shadow: 0px 3px 13px -3px rgba(0, 0, 0, 0.57);
+    box-shadow: 0px 3px 13px -3px rgba(0, 0, 0, 0.57);
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    position: absolute;
+    top: 100%;
+    left: 0px;
+    z-index: 100;
+    background-color: white;
+}
+
+/* Fim Mensagems */
+
+/* Wizzard */
+
+.stepwizard-step p {
+    margin-top: 0px;
+    color: black;
+}
+
+.stepwizard-row {
+    display: table-row;
+}
+
+.stepwizard {
+    display: table;
+    width: 100%;
+    position: relative;
+}
+
+.stepwizard .btn.disabled, .stepwizard .btn[disabled], .stepwizard fieldset[disabled] .btn {
+    opacity: 1 !important;
+    color: black;
+}
+
+.stepwizard-row:before {
+    top: 14px;
+    bottom: 0;
+    position: absolute;
+    content: " ";
+    width: 100%;
+    height: 4px;
+    background-color: #ccc;
+    z-index: 0;
+}
+
+.stepwizard-step {
+    display: table-cell;
+    text-align: center;
+    position: relative;
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
+    z-index: 999;
+}
+
+.datepicker table tr td.disabled, .datepicker table tr td.disabled:hover{
+    color: #dddddd !important;
+}
+
+/*MESSAGES*/
+#aquilesMessageContainer ul {
+    list-style: none;
+    padding: 0;
+}
+#aquilesMessageContainer .alert .glyphicon{
+    display:table-cell;
+}
+#aquilesMessageContainer .alert div,
+#aquilesMessageContainer .alert span{
+    padding-left: 5px;
+    display:table-cell;
+}
+#aquilesMessageContainer  {
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-top: 10px;
+}
+
+.alert .close{
+    opacity: 1 !important;
+    color:white;
+}
+
+.alert a {
+    text-decoration: none !important;
+}
+
+.aquiles-uppercase{
+    text-transform: uppercase;
+}

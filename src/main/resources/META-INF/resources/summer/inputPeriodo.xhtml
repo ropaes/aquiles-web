@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:aquiles="http://java.sun.com/jsf/composite/aquiles"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<composite:interface>
+
+
+    <composite:attribute name="sLabel" required="true"
+                         shortDescription="Label dp inputtext"/>
+
+    <composite:attribute name="valueInicio" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+
+    <composite:attribute name="valueFim" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+
+    <composite:attribute name="sStyleClass"
+                         shortDescription="StyleClasses adicionais ao componente InputText"/>
+
+    <composite:attribute name="startDateToday" default="false"/>
+
+    <composite:attribute name="altField" default="false" shortDescription="Caso queira o preenchimento automático do período final."/>
+    <composite:attribute name="altFieldTarget" default="false" shortDescription="Classe que será o target do altField."/>
+
+    <composite:attribute name="sOnclick"
+                         shortDescription="On Click"/>
+    <composite:attribute name="sDisabled" default="false"
+                         shortDescription="disable"/>
+    <composite:attribute name="sRendered" default="true" type="boolean"
+                         shortDescription="rendered"/>
+    <composite:attribute name="sRequired" default="false" type="boolean"
+                         shortDescription="required"/>
+
+</composite:interface>
+
+<composite:implementation>
+    <c:if test="#{cc.attrs.sRendered}">
+        <div class="form-group">
+            <h:outputLabel value="#{cc.attrs.sLabel} #{cc.attrs.sRequired?' *':''}"/>
+            <div class="input-group">
+                <aquiles:inputDate value="#{cc.attrs.valueInicio}"
+                                  sOnclick="#{cc.attrs.sOnclick}"
+                                  sDisabled="#{cc.attrs.sDisabled}"
+                                  startDateToday="#{cc.attrs.startDateToday}"
+                                  altField="#{cc.attrs.altField}"
+                                  sRequired="#{cc.attrs.sRequired}"
+                                  sRequiredMessage="A data inicial do campo #{cc.attrs.sLabel} é obrigatória"
+                                  id="compositeAquilesInputPeriodoStart"/>
+                <span class="input-group-addon" style="border: 0px;">até</span>
+                <aquiles:inputDate value="#{cc.attrs.valueFim}"
+                                  sOnclick="#{cc.attrs.sOnclick}"
+                                  sDisabled="#{cc.attrs.sDisabled}"
+                                  startDateToday="#{cc.attrs.startDateToday}"
+                                  altFieldTarget="#{cc.attrs.altField}"
+                                  sRequired="#{cc.attrs.sRequired}"
+                                  sRequiredMessage="A data final do campo #{cc.attrs.sLabel} é obrigatória"
+                                  id="compositeAquilesInputPeriodoEnd"
+                                  />
+            </div>
+        </div>
+    </c:if>
+</composite:implementation>
+
+</html>

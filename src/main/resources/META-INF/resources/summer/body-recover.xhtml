@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:aquiles="http://java.sun.com/jsf/composite/aquiles">
+
+<composite:interface>
+    <composite:attribute name="projectName" shortDescription="Project name to show in page"
+                         required="true"/>
+    <composite:attribute name="projectVersion" shortDescription="Project version to show in page"
+                         required="true"/>
+    <composite:attribute name="logoPath" shortDescription="path to logo that should be loaded in template"
+                         required="true"/>
+    <composite:attribute name="logoWidth" shortDescription="logo width"
+                         default="70"/>
+    <composite:attribute name="logoHeight" shortDescription="logo height"
+                         default="45"/>
+    <composite:attribute name="description" shortDescription="Description to show in XHTML page about recover page"
+                         required="true"/>
+    <composite:attribute name="resetMethod" shortDescription="Method with logic to reset password"
+                         method-signature="void reset()"
+                         required="true"/>
+</composite:interface>
+<composite:implementation>
+    <h:body styleClass="hold-transition login-page">
+
+        <div class="login-box">
+
+            <div class="login-logo">
+                <h:graphicImage name="#{cc.attrs.logoPath}" width="#{cc.attrs.logoWidth}"
+                                height="#{cc.attrs.logoHeight}" style="margin-top:4px"/>
+                #{cc.attrs.projectName} <span style="font-size: 12px; font-align: center;">ver
+                #{cc.attrs.projectVersion} </span>
+
+            </div>
+            <!-- /.login-logo -->
+            <div class="login-box-body">
+                <p class="login-box-msg">#{cc.attrs.description}</p>
+                <h:form enctype="multipart/form-data" id="frmBodyRecover">
+                    <composite:insertChildren/>
+                    <div class="row">
+
+                        <hr/>
+                        <!-- /.col -->
+                        <div class="col-xs-4">
+                            <h:commandLink action="#{cc.attrs.resetMethod}" id="commandLinkReset"
+                                           styleClass="btn btn-default btn-block btn-flat">
+                                <i class="fa fa-send" aria-hidden="true"></i> Enviar
+                            </h:commandLink>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+                </h:form>
+                <aquiles:messages/>
+            </div>
+            <!-- /.login-box-body -->
+        </div>
+
+        <!-- /.login-box -->
+
+        <!-- jQuery 2.1.4 -->
+        <h:outputScript name="third/plugins/jQuery/jQuery-2.1.4.min.js"/>
+
+        <!-- Bootstrap 3.3.5 -->
+        <h:outputScript name="third/bootstrap/js/bootstrap.min.js"/>
+
+        <h:outputScript name="third/dist/js/jquery.mask.min.js"/>
+        <h:outputScript library="javax.faces" name="jsf.js"/>
+
+        <h:outputScript name="js/aquiles.js"/>
+        <h:outputScript name="js/aquiles-login.js"/>
+    </h:body>
+</composite:implementation>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<composite:interface>
+    <composite:attribute name="managedBean"
+                         type="br.com.aquiles.web.mb.BasicDetailMB" required="true"
+                         shortDescription="Nome do managedBean do componente"/>
+    <composite:attribute name="outcomeOnFinish" required="true"
+                         shortDescription="Outcome ao clicar no botão cancelar ou salvar. Geralmente uma listagem"/>
+    <composite:attribute name="sExecute" default="@form"/>
+    <composite:attribute name="sRender" default="@form"/>
+
+    <composite:attribute name="disableSave" default="false"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <div class="box-footer">
+        <div class="btn-group">
+            <h:link outcome="#{cc.attrs.outcomeOnFinish}"
+                    rendered="#{cc.attrs.managedBean.action ne 'VISU' and utilMB.isComponentePermitidoActivePageCANC()}"
+                    onclick="if(!confirm('Tem certeza que deseja cancelar as alterações ?')){return false;}"
+                    styleClass="btn btn-labeled btn-danger" pt:data-ignore-visu="true"
+                    id="aquilesButtonCanc">
+                <span class="btn-label">
+                    <i class="fa fa-close"></i>
+                </span>
+                <h:outputText value="Cancelar" styleClass="hidden-xs"/>
+            </h:link>
+            <h:link outcome="#{cc.attrs.outcomeOnFinish}"
+                    rendered="#{cc.attrs.managedBean.action eq 'VISU' and utilMB.isComponentePermitidoActivePageCANC()}"
+                    styleClass="btn btn-labeled btn-danger" pt:data-ignore-visu="true"
+                    id="aquilesButtonBack">
+                <span class="btn-label">
+                    <i class="fa fa-arrow-left"></i>
+                </span>
+                <h:outputText value="Voltar" styleClass="hidden-xs"/>
+            </h:link>
+            <h:commandLink rendered="#{utilMB.isComponentePermitidoActivePageSAVE()}"
+                           action="#{cc.attrs.managedBean.salvar(cc.attrs.outcomeOnFinish)}"
+                           styleClass="btn btn-labeled btn-success #{cc.attrs.disableSave ? 'disabled' : ''}"
+                           id="aquilesButtonSave">
+                <span class="btn-label">
+                    <i class="fa fa-save"></i>
+                </span>
+                <h:outputText value="#{utilMB.getDescricaoFuncao('SAVE')}" styleClass="hidden-xs"/>
+                <f:ajax execute="#{cc.attrs.sExecute}" render="#{cc.attrs.sRender}"
+                        onevent="function (data) { callLoading(data);  }"/>
+            </h:commandLink>
+            <composite:insertChildren/>
+        </div>
+    </div>
+
+</composite:implementation>
+
+</html>

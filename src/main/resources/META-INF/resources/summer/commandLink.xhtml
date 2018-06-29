@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<composite:interface>
+    <composite:attribute name="sLabel" required="true" shortDescription="Field Label"/>
+    <composite:attribute name="sFontAwesomeIcon" default="fa fa-info"/>
+    <composite:attribute name="sStyleClass" default="btn-default"/>
+    <composite:attribute name="sDisabled" default="false"/>
+    <composite:attribute name="sAjaxExecute" default="@this"/>
+    <composite:attribute name="sAjaxRender" default="@this"/>
+    <composite:attribute name="sShowProcessing" default="false"
+                         shortDescription="Show 'processing...' dialog when ajax request is send"/>
+    <composite:attribute name="sOnEvent" default="function(data){}"
+                         shortDescription="When ajax request is send what javascript method should be executed"/>
+    <composite:attribute name="sUseAction" default="false"/>
+    <composite:attribute name="sAction" required="#{cc.attrs.sUseAction}"
+                         method-signature="java.lang.String action()"/>
+    <composite:attribute name="sActionListener" required="#{not cc.attrs.sUseAction}"
+                         method-signature="void actionListener()"/>
+    <composite:attribute name="sTitle"/>
+    <composite:attribute name="sRequireConfirm" default="false"/>
+    <composite:attribute name="sOnclick"
+                         default="#{cc.attrs.sRequireConfirm ? 'if (!confirm(\'Deseja confirma esta ação ?\'))return false;' : ''}"/>
+</composite:interface>
+
+<composite:implementation>
+    <h:panelGroup rendered="#{cc.attrs.sUseAction}">
+        <h:commandLink title="#{cc.attrs.sTitle}"
+                       action="#{cc.attrs.sAction}"
+                       onclick="#{cc.attrs.sOnclick}"
+                       styleClass="btn btn-labeled #{cc.attrs.sStyleClass}
+#{cc.attrs.sDisabled ? 'disabled' : ''}">
+        <span class="btn-label">
+          <i class="#{cc.attrs.sFontAwesomeIcon}" aria-hidden="true"></i>
+        </span>
+            <f:ajax execute="#{cc.attrs.sAjaxExecute}" render="#{cc.attrs.sAjaxRender}"
+                    onevent="#{cc.attrs.sShowProcessing ? 'callLoading' : cc.attrs.sOnEvent}"/>
+            <h:outputText value=" #{cc.attrs.sLabel}" styleClass="hidden-xs"/>
+        </h:commandLink>
+    </h:panelGroup>
+    <h:panelGroup rendered="#{not cc.attrs.sUseAction}">
+        <h:commandLink title="#{cc.attrs.sTitle}"
+                       actionListener="#{cc.attrs.sActionListener}"
+                       onclick="#{cc.attrs.sOnclick}"
+                       styleClass="btn btn-labeled #{cc.attrs.sStyleClass}
+#{cc.attrs.sDisabled ? 'disabled' : ''}">
+        <span class="btn-label">
+          <i class="#{cc.attrs.sFontAwesomeIcon}" aria-hidden="true"></i>
+        </span>
+            <f:ajax execute="#{cc.attrs.sAjaxExecute}" render="#{cc.attrs.sAjaxRender}"
+                    onevent="#{cc.attrs.sShowProcessing ? 'callLoading' : cc.attrs.sOnEvent}"/>
+            <h:outputText value=" #{cc.attrs.sLabel}" styleClass="hidden-xs"/>
+        </h:commandLink>
+    </h:panelGroup>
+</composite:implementation>
+
+</html>

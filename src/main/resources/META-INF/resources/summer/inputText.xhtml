@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:ptf="http://xmlns.jcp.org/jsf/core">
+
+<composite:interface>
+    <composite:attribute name="sLabel" required="true"
+                         shortDescription="Label dp inputtext"/>
+
+    <composite:attribute name="value" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+
+    <composite:attribute name="sStyleClass"
+                         shortDescription="StyleClasses adicionais ao componente InputText"/>
+    <composite:attribute name="sOnclick"
+                         shortDescription="On Click"/>
+    <composite:attribute name="sDisabled" default="false"
+                         shortDescription="disable"/>
+    <composite:attribute name="sRendered" default="true" type="boolean"
+                         shortDescription="rendered"/>
+    <composite:attribute name="sRequired" default="false" type="boolean"
+                         shortDescription="required"/>
+    <composite:attribute name="sRequiredMessage" default="O campo #{cc.attrs.sLabel} é obrigatório"
+                         shortDescription="requiredMessage"/>
+    <composite:attribute name="sMaxlength" default="999999"
+                         shortDescription="maxlength"/>
+    <composite:attribute name="placeholder"/>
+    <composite:attribute name="sHelpText" required="false"
+                         shortDescription="incluir texto de ajuda abaixo do inputText"/>
+    <composite:attribute name="sAddon" required="false" shortDescription="content to add before the inputText"/>
+    <composite:attribute name="sAddonEnd" required="false" shortDescription="content to add after the inputText"/>
+    <composite:attribute name="uppercase" default="false"/>
+    <composite:attribute name="sConverter" default=""/>
+    <!-- AJAX ATTRIBUTES -->
+    <composite:attribute name="useAjax" default="false"/>
+    <composite:attribute name="ajaxEvent" default="blur" required="#{cc.attrs.useAjax}"/>
+    <composite:attribute name="ajaxExecute" default="@this"/>
+    <composite:attribute name="ajaxRender" default="@this"/>
+    <composite:attribute name="useAjaxListener" default="false"/>
+    <composite:attribute name="ajaxListener" method-signature="void action()" required="#{cc.attrs.useAjaxListener}"/>
+    <composite:attribute name="ajaxOnevent" default="function(data){}"/>
+
+    <composite:attribute name="idClickOnEnter"
+                         shortDescription="Click on HTML component on ENTER keypress, if component ID is equal to this argument ID"/>
+    <composite:attribute name="idContainsClickOnEnter"
+                         shortDescription="Click on HTML component on ENTER keypress, if component ID contains this argument ID"/>
+    <composite:attribute name="includeButtons"/>
+    <composite:attribute name="sAutoFocus" default="false" type="java.lang.Boolean"/>
+</composite:interface>
+
+<composite:implementation>
+    <c:if test="#{cc.attrs.sRendered and cc.attrs.sAddon==null and cc.attrs.sAddonEnd==null and cc.attrs.includeButtons==null}">
+        <div class="form-group">
+            <h:outputLabel value="#{cc.attrs.sLabel} #{cc.attrs.sRequired?' *':''}"/>
+            <h:inputText value="#{cc.attrs.value}"
+                         pt:placeholder="#{cc.attrs.placeholder}"
+                         styleClass="form-control #{cc.attrs.sStyleClass} #{cc.attrs.uppercase ? 'aquiles-uppercase' : ''}"
+                         onclick="#{cc.attrs.sOnclick}"
+                         disabled="#{cc.attrs.sDisabled}"
+                         requiredMessage="#{cc.attrs.sRequiredMessage}"
+                         required="#{cc.attrs.sRequired}"
+                         maxlength="#{cc.attrs.sMaxlength}"
+                         onkeypress="clickButtonOnEnter(event)"
+                         pt:data-clickonenter-id="#{cc.attrs.idClickOnEnter}"
+                         pt:data-clickonenter-contains-id="#{cc.attrs.idContainsClickOnEnter}"
+                         id="aquilesInputTextNoAddon">
+                <composite:insertChildren/>
+                <c:if test="#{cc.attrs.sAutoFocus}">
+                    <ptf:passThroughAttribute name="autofocus" value="autofocus"/>
+                </c:if>
+                <c:if test="#{cc.attrs.useAjaxListener}">
+                    <f:ajax event="#{cc.attrs.ajaxEvent}"
+                            execute="#{cc.attrs.ajaxExecute}"
+                            render="#{cc.attrs.ajaxRender}"
+                            listener="#{cc.attrs.ajaxListener}"
+                            onevent="#{cc.attrs.ajaxOnevent}"
+                            disabled="#{not cc.attrs.useAjax}"/>
+                </c:if>
+                <c:if test="#{not cc.attrs.useAjaxListener}">
+                    <f:ajax event="#{cc.attrs.ajaxEvent}"
+                            execute="#{cc.attrs.ajaxExecute}"
+                            render="#{cc.attrs.ajaxRender}"
+                            onevent="#{cc.attrs.ajaxOnevent}"
+                            disabled="#{not cc.attrs.useAjax}"/>
+                </c:if>
+                <c:if test="#{not empty cc.attrs.sConverter and not cc.attrs.uppercase}">
+                    <f:converter converterId="#{cc.attrs.sConverter}"/>
+                </c:if>
+                <c:if test="#{cc.attrs.uppercase}">
+                    <f:converter converterId="omnifaces.ToUpperCaseConverter" />
+                </c:if>
+            </h:inputText>
+            <c:if test="#{not empty cc.attrs.sHelpText}">
+                <p class="help-block">#{cc.attrs.sHelpText}</p>
+            </c:if>
+        </div>
+    </c:if>
+    <c:if test="#{cc.attrs.sRendered and (!empty cc.attrs.sAddon or !empty cc.attrs.sAddonEnd or !empty cc.attrs.includeButtons)}">
+        <div class="form-group">
+            <h:outputLabel value="#{cc.attrs.sLabel} #{cc.attrs.sRequired?' *':''}"/>
+            <div class="input-group">
+                <c:if test="#{!empty cc.attrs.sAddon}">
+                    <span class="input-group-addon"><h:outputText value="#{cc.attrs.sAddon}"/> </span>
+                </c:if>
+                <h:inputText value="#{cc.attrs.value}"
+                             pt:placeholder="#{cc.attrs.placeholder}"
+                             styleClass="form-control #{cc.attrs.sStyleClass} #{cc.attrs.uppercase ? 'aquiles-uppercase' : ''}"
+                             onclick="#{cc.attrs.sOnclick}"
+                             disabled="#{cc.attrs.sDisabled}"
+                             requiredMessage="#{cc.attrs.sRequiredMessage}"
+                             required="#{cc.attrs.sRequired}"
+                             maxlength="#{cc.attrs.sMaxlength}"
+                             onkeypress="clickButtonOnEnter(event)"
+                             pt:data-clickonenter-id="#{cc.attrs.idClickOnEnter}"
+                             pt:data-clickonenter-contains-id="#{cc.attrs.idContainsClickOnEnter}"
+                             id="aquilesInputTextWithAddon">
+                    <composite:insertChildren/>
+                    <c:if test="#{cc.attrs.sAutoFocus}">
+                        <ptf:passThroughAttribute name="autofocus" value="autofocus"/>
+                    </c:if>
+                    <c:if test="#{cc.attrs.useAjaxListener}">
+                        <f:ajax event="#{cc.attrs.ajaxEvent}"
+                                execute="#{cc.attrs.ajaxExecute}"
+                                render="#{cc.attrs.ajaxRender}"
+                                listener="#{cc.attrs.ajaxListener}"
+                                onevent="#{cc.attrs.ajaxOnevent}"
+                                disabled="#{not cc.attrs.useAjax}"/>
+                    </c:if>
+                    <c:if test="#{not cc.attrs.useAjaxListener}">
+                        <f:ajax event="#{cc.attrs.ajaxEvent}"
+                                execute="#{cc.attrs.ajaxExecute}"
+                                render="#{cc.attrs.ajaxRender}"
+                                onevent="#{cc.attrs.ajaxOnevent}"
+                                disabled="#{not cc.attrs.useAjax}"/>
+                    </c:if>
+                    <c:if test="#{not empty cc.attrs.sConverter and not cc.attrs.uppercase}">
+                        <f:converter converterId="#{cc.attrs.sConverter}"/>
+                    </c:if>
+                    <c:if test="#{cc.attrs.uppercase}">
+                        <f:converter converterId="omnifaces.ToUpperCaseConverter" />
+                    </c:if>
+                </h:inputText>
+                <c:if test="#{!empty cc.attrs.sAddonEnd}">
+                    <span class="input-group-addon"><h:outputText value="#{cc.attrs.sAddonEnd}"/> </span>
+                </c:if>
+                <c:if test="#{!empty cc.attrs.includeButtons}">
+                    <div class="input-group-btn">
+                        <ui:include src="#{cc.attrs.includeButtons}"/>
+                    </div>
+                </c:if>
+            </div>
+            <c:if test="#{not empty cc.attrs.sHelpText}">
+                <p class="help-block">#{cc.attrs.sHelpText}</p>
+            </c:if>
+        </div>
+    </c:if>
+</composite:implementation>
+
+</html>

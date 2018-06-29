@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<composite:interface>
+
+
+    <composite:attribute name="sLabel" required="false"
+                         shortDescription="Label dp inputtext"/>
+
+    <composite:attribute name="useConverter" default="false"
+                         shortDescription="Habilita o uso do Converter"/>
+
+    <composite:attribute name="value" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+
+    <composite:attribute name="styleClass" required="false"
+                         shortDescription="StyleClasses adicionais ao componente InputText"/>
+    <composite:attribute name="sOnclick" required="false"
+                         shortDescription="On Click"/>
+    <composite:attribute name="sDisabled" default="false"
+                         shortDescription="disable"/>
+    <composite:attribute name="sRendered" default="true" type="boolean"
+                         shortDescription="rendered"/>
+    <composite:attribute name="sRequired" default="false" type="boolean"
+                         shortDescription="required"/>
+    <composite:attribute name="sRequiredMessage" required="false" default="O campo #{cc.attrs.sLabel} é obrigatório"
+                         shortDescription="Message when component is required"/>
+    <composite:attribute name="sRequiredMessage" required="false"
+                         shortDescription="Message when component is required"/>
+    <composite:attribute name="styleLabel" default=""/>
+    <!-- AJAX ATTRIBUTES -->
+    <composite:attribute name="useAjax" default="false"/>
+    <composite:attribute name="ajaxEvent" default="change" required="#{cc.attrs.useAjax}"/>
+    <composite:attribute name="ajaxExecute" default="@this"/>
+    <composite:attribute name="ajaxRender" default="@this"/>
+    <composite:attribute name="useAjaxListener" default="false"/>
+    <composite:attribute name="ajaxListener" method-signature="void action()" required="#{cc.attrs.useAjaxListener}"/>
+    <composite:attribute name="ajaxOnevent" default="function(data){}"/>
+
+    <composite:attribute name="includeButtonAfter" default=""
+                         shortDescription="Path to button that should be included after component"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <c:if test="#{cc.attrs.useConverter}">
+        <c:if test="#{cc.attrs.sLabel!=null}">
+            <h:outputLabel value="#{cc.attrs.sLabel} #{cc.attrs.sRequired?' *':''}"
+                           style="#{cc.attrs.styleLabel}"/>
+        </c:if>
+        <div class="#{not empty cc.attrs.includeButtonAfter ? 'input-group' : ''}">
+            <div class="form-group">
+                <h:selectOneMenu styleClass="form-control  #{cc.attrs.styleClass}"
+                                 value="#{cc.attrs.value}" title=""
+                                 converter="omnifaces.SelectItemsConverter"
+                                 onclick="#{cc.attrs.sOnclick}"
+                                 disabled="#{cc.attrs.sDisabled}"
+                                 required="#{cc.attrs.sRequired}"
+                                 requiredMessage="#{cc.attrs.sRequiredMessage}"
+                                 id="aquilesSelectOneMenuWithConverter">
+                    <c:if test="#{cc.attrs.useAjaxListener}">
+                        <f:ajax event="#{cc.attrs.ajaxEvent}"
+                                execute="#{cc.attrs.ajaxExecute}"
+                                render="#{cc.attrs.ajaxRender}"
+                                listener="#{cc.attrs.ajaxListener}"
+                                onevent="#{cc.attrs.ajaxOnevent}"
+                                disabled="#{not cc.attrs.useAjax}"/>
+                    </c:if>
+                    <c:if test="#{not cc.attrs.useAjaxListener}">
+                        <f:ajax event="#{cc.attrs.ajaxEvent}"
+                                execute="#{cc.attrs.ajaxExecute}"
+                                render="#{cc.attrs.ajaxRender}"
+                                onevent="#{cc.attrs.ajaxOnevent}"
+                                disabled="#{not cc.attrs.useAjax}"/>
+                    </c:if>
+                    <composite:insertChildren/>
+                </h:selectOneMenu>
+            </div>
+            <h:panelGroup rendered="#{not empty cc.attrs.includeButtonAfter}">
+                    <span class="input-group-btn">
+                        <ui:include src="#{cc.attrs.includeButtonAfter}"/>
+                    </span>
+            </h:panelGroup>
+        </div>
+    </c:if>
+    <c:if test="#{!cc.attrs.useConverter}">
+        <c:if test="#{cc.attrs.sLabel!=null}">
+            <h:outputLabel value="#{cc.attrs.sLabel}  #{cc.attrs.sRequired?' *':''}"
+                           style="#{cc.attrs.styleLabel}"/>
+        </c:if>
+        <div class="#{not empty cc.attrs.includeButtonAfter ? 'input-group' : ''}">
+            <div class="form-group">
+                <h:selectOneMenu styleClass="form-control #{cc.attrs.styleClass}"
+                                 value="#{cc.attrs.value}"
+                                 onclick="#{cc.attrs.sOnclick}"
+                                 disabled="#{cc.attrs.sDisabled}"
+                                 required="#{cc.attrs.sRequired}"
+                                 requiredMessage="#{cc.attrs.sRequiredMessage}"
+                                 id="aquilesSelectOneMenuNoConverter">
+                    <c:if test="#{cc.attrs.useAjaxListener}">
+                        <f:ajax event="#{cc.attrs.ajaxEvent}"
+                                execute="#{cc.attrs.ajaxExecute}"
+                                render="#{cc.attrs.ajaxRender}"
+                                listener="#{cc.attrs.ajaxListener}"
+                                onevent="#{cc.attrs.ajaxOnevent}"
+                                disabled="#{not cc.attrs.useAjax}"/>
+                    </c:if>
+                    <c:if test="#{not cc.attrs.useAjaxListener}">
+                        <f:ajax event="#{cc.attrs.ajaxEvent}"
+                                execute="#{cc.attrs.ajaxExecute}"
+                                render="#{cc.attrs.ajaxRender}"
+                                onevent="#{cc.attrs.ajaxOnevent}"
+                                disabled="#{not cc.attrs.useAjax}"/>
+                    </c:if>
+                    <composite:insertChildren/>
+                </h:selectOneMenu>
+            </div>
+            <h:panelGroup rendered="#{not empty cc.attrs.includeButtonAfter}">
+                 <span class="input-group-btn">
+                        <ui:include src="#{cc.attrs.includeButtonAfter}"/>
+                    </span>
+            </h:panelGroup>
+        </div>
+    </c:if>
+
+</composite:implementation>
+
+</html>

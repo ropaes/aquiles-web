@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+>
+
+<composite:interface>
+    <composite:attribute name="datatableID" type="java.lang.String" default="aquilesSimpleDataTable"/>
+    <composite:attribute name="beans" required="true"/>
+    <composite:attribute name="beans"/>
+    <composite:attribute name="collapsed" type="java.lang.Boolean" default="false"/>
+    <composite:attribute name="tableStriped" default="false"/>
+</composite:interface>
+
+<composite:implementation>
+    <div class="table-responsive">
+        <h:dataTable id="#{cc.attrs.datatableID}"
+                     styleClass="simpleDataTableJquery display nowrap table table-bordered table-hover dataTable #{cc.attrs.tableStriped ? 'table-striped' : ''}"
+                     var="bean" value="#{cc.attrs.beans}">
+            <composite:insertChildren/>
+        </h:dataTable>
+    </div>
+</composite:implementation>
+</html>

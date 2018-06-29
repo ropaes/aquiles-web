@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<composite:interface>
+
+
+    <composite:attribute name="sLabel" required="false"
+                         shortDescription="Label dp inputtext"/>
+    <composite:attribute name="value" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+
+    <composite:attribute name="sStyleClass"
+                         shortDescription="StyleClasses adicionais ao componente InputText"/>
+
+    <composite:attribute name="sDisabled" default="false"
+                         shortDescription="disable"/>
+    <composite:attribute name="sRendered" type="boolean" default="true"
+                         shortDescription="rendered"/>
+    <composite:attribute name="sRequired" type="boolean" default="false"
+                         shortDescription="required"/>
+    <composite:attribute name="placeholder"/>
+    <composite:attribute name="actionListener" required="true"
+                         shortDescription="ActionListener que sera chamada para buscar os dados de acordo com os valores do filtro"
+                         method-signature="void actionListener()"/>
+    <composite:attribute name="onclick"
+                         shortDescription="Ação a ser tomada pelo componente ao ser clicado pelo usuário"/>
+    <composite:attribute name="sRender"
+                         shortDescription="componente a renderizar"/>
+</composite:interface>
+
+<composite:implementation>
+    <c:if test="#{cc.attrs.sRendered}">
+        <c:if test="#{cc.attrs.sLabel!=null}">
+            <h:outputLabel value="#{cc.attrs.sLabel}"/>
+        </c:if>
+        <h:panelGroup id="panelGprSearch">
+            <div class="input-group">
+                <h:inputText value="#{cc.attrs.value}"
+                             styleClass="form-control #{cc.attrs.sStyleClass}" style="border-right: 0px;"
+                             disabled="#{cc.attrs.sDisabled}"
+                             id="iptSearchField"
+                             pt:placeholder="#{cc.attrs.placeholder}"/>
+                <span class="input-group-btn">
+                    <h:commandLink id="cmdLinkSearch"
+                                   class="btn btn-default"
+                                   onclick="#{cc.attrs.onclick}"
+                                   actionListener="#{cc.attrs.actionListener}">
+                        <i class="fa fa-search"/> BUSCAR
+                        <f:ajax execute="panelGprSearch" render="#{cc.attrs.cc.attrs.sRender!=null?cc.attrs.cc.attrs.sRender:'@form'}"/>
+                    </h:commandLink>
+                </span>
+            </div>
+        </h:panelGroup>
+    </c:if>
+</composite:implementation>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+<composite:interface>
+    <composite:attribute name="idDataTable" default="dataTableListagem"
+                         shortDescription="ID do DataTable. Usado para referencia em outras partes do codigo"/>
+
+    <composite:attribute name="managedBean"
+                         type="br.com.aquiles.web.mb.BasicListMB" required="true"
+                         shortDescription="Nome do managedBean que sera usado dentro do datatable"/>
+
+    <composite:attribute name="showSelectAll" type="boolean" default="true"
+                         shortDescription="Mostra a coluna para selecionar todos os registros. Padrão = true"/>
+
+    <composite:attribute name="showNewButton" type="boolean"
+                         default="true"
+                         shortDescription="Permite o cadastro de novos registros. Padrão = true"/>
+
+    <composite:attribute name="showEditButton" type="boolean"
+                         default="true"
+                         shortDescription="Permite a alteração de registros. Padrão = true"/>
+
+    <composite:attribute name="showViewButton" type="boolean"
+                         default="true"
+                         shortDescription="Permite a visualização de registros. Padrão = true"/>
+
+    <composite:attribute name="showRemoveButton" type="boolean"
+                         default="true"
+                         shortDescription="Permite a remoção de registros. Padrão = true"/>
+
+    <composite:attribute name="targetPage" type="String"
+                         shortDescription="Caminho para acesso a pagina de insercao ou alteracao do registro."/>
+
+    <composite:attribute name="sEnableRowDblClick" default="true"
+                         shortDescription="Habilitar o double-click na linha do datatable"/>
+
+    <composite:attribute name="fontAwesomeNewButton" default="fa fa-plus"
+                         shortDescription="Icone FontAwesome para uso no botão Novo. Padrão 'fa fa-plus'"/>
+    <composite:attribute name="fontAwesomeEditButton" default="fa fa-pencil-square-o"
+                         shortDescription="Icone FontAwesome para uso no botão Editar. Padrão 'fa fa-pencil-square-o'"/>
+    <composite:attribute name="fontAwesomeViewButton" default="fa fa-eye"
+                         shortDescription="Icone FontAwesome para uso no botão Visualizar. Padrão 'fa fa-eye'"/>
+    <composite:attribute name="fontAwesomeRemoveButton" default="fa fa-trash-o"
+                         shortDescription="Icone FontAwesome para uso no botão Remover. Padrão 'fa fa-trash-o'"/>
+
+    <composite:attribute name="titleNewButton" default="Clique para criar um novo registro"/>
+    <composite:attribute name="titleEditButton" default="Clique para alterar o registro"/>
+    <composite:attribute name="titleViewButton" default="Clique para visualizar um registro"/>
+    <composite:attribute name="titleRemoveButton" default="Clique para remover os registros selecionados"/>
+    <composite:attribute name="textConfirmRemoveButton" default="Tem certeza que deseja remover os itens selecionados ?"/>
+
+    <composite:attribute name="includeButtons"/>
+
+</composite:interface>
+
+<composite:implementation>
+    <div class="row">
+        <!-- left column -->
+
+        <div class="col-xs-12">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="btn-group">
+                                <h:commandLink title="#{cc.attrs.titleNewButton}"
+                                               rendered="#{cc.attrs.showNewButton and utilMB.isComponentePermitidoActivePageADIC()}"
+                                               action="#{cc.attrs.managedBean.navigateTo(cc.attrs.targetPage,'action','ADIC')}"
+                                               styleClass="btn btn-labeled btn-success"
+                                               id="aquilesButtonAdic">
+                                    <span class="btn-label">
+                                        <i class="#{cc.attrs.fontAwesomeNewButton}"></i>
+                                    </span>
+                                    <h:outputText value="#{utilMB.getDescricaoFuncao('ADIC')}" styleClass="hidden-xs"/>
+                                    <f:ajax execute="@this" render="@form"/>
+                                </h:commandLink>
+
+                                <h:commandLink title="#{cc.attrs.titleEditButton}"
+                                               rendered="#{cc.attrs.showEditButton and utilMB.isComponentePermitidoActivePageALTR()}"
+                                               action="#{cc.attrs.managedBean.navigateTo(cc.attrs.targetPage,'action','ALTR','id',cc.attrs.managedBean.lastSelected.id)}"
+                                               styleClass="btn btn-labeled btn-primary #{(cc.attrs.managedBean.selectedCount != 1 or not cc.attrs.managedBean.lastSelected.editable) ? 'disabled' : ''}"
+                                               id="aquilesButtonAltr">
+                                    <span class="btn-label">
+                                        <i class="#{cc.attrs.fontAwesomeEditButton}" aria-hidden="true"></i>
+                                    </span>
+                                    <h:outputText value="#{utilMB.getDescricaoFuncao('ALTR')}" styleClass="hidden-xs"/>
+                                    <f:ajax execute="@this" render="@form"/>
+                                </h:commandLink>
+
+                                <h:commandLink title="#{cc.attrs.titleViewButton}"
+                                               rendered="#{cc.attrs.showViewButton and utilMB.isComponentePermitidoActivePageVISU()}"
+                                               action="#{cc.attrs.managedBean.navigateTo(cc.attrs.targetPage,'action','VISU','id',cc.attrs.managedBean.lastSelected.id)}"
+                                               styleClass="btn btn-labeled btn-default #{(cc.attrs.managedBean.selectedCount != 1) ? 'disabled' : ''}"
+                                               id="aquilesButtonVisu">
+                                    <span class="btn-label">
+                                        <i class="#{cc.attrs.fontAwesomeViewButton}" aria-hidden="true"></i>
+                                    </span><h:outputText value="#{utilMB.getDescricaoFuncao('VISU')}"
+                                                         styleClass="hidden-xs"/>
+                                    <f:ajax execute="@this" render="@form"/>
+                                </h:commandLink>
+
+                                <h:commandLink title="#{cc.attrs.titleRemoveButton}"
+                                               rendered="#{cc.attrs.showRemoveButton and utilMB.isComponentePermitidoActivePageEXCL()}"
+                                               actionListener="#{cc.attrs.managedBean.removeSelected()}"
+                                               onclick="if (!confirm('#{cc.attrs.textConfirmRemoveButton}')){ return false; } else { return true; }"
+                                               styleClass="btn btn-labeled btn-danger #{(cc.attrs.managedBean.selectedCount lt 1 or
+                                        not cc.attrs.managedBean.lastSelected.deletable) ? 'disabled' : ''}"
+                                               id="aquilesButtonExcl">
+                                    <span class="btn-label">
+                                        <i class="#{cc.attrs.fontAwesomeRemoveButton}" aria-hidden="true"></i>
+                                    </span><h:outputText value="#{utilMB.getDescricaoFuncao('EXCL')}"
+                                                         styleClass="hidden-xs"/>
+                                    <f:ajax execute="@this" render="@form"/>
+                                </h:commandLink>
+                                <ui:include src="#{cc.attrs.includeButtons}"/>
+                            </div>
+
+                            <div class="box-tools pull-right">
+                                <h:commandLink styleClass="btn btn-box-tool"
+                                               actionListener="#{cc.attrs.managedBean.generatePDF}"
+                                               title="Gerar PDF"
+                                               id="aquilesButtonGenPDF">
+                                    <i class="fa fa-file-pdf-o fa-lg" aria-hidden="true"></i>
+                                </h:commandLink>
+                                <h:commandLink styleClass="btn btn-box-tool"
+                                               actionListener="#{cc.attrs.managedBean.generateXLS}"
+                                               title="Gerar Planilha"
+                                               id="aquilesButtonGenPlan">
+                                    <i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div id="example2_wrapper"
+                         class="dataTables_wrapper form-inline dt-bootstrap">
+                        <div class="row">
+                            <div class="col-sm-6"></div>
+                            <div class="col-sm-6"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="table-responsive">
+                                    <h:dataTable var="bean"
+                                                 value="#{cc.attrs.managedBean.beans}"
+                                                 id="#{cc.attrs.idDataTable}"
+                                                 styleClass="display nowrap table table-bordered table-hover dataTable table-striped sDataTableJquery">
+
+                                        <h:column rendered="#{cc.attrs.showSelectAll}"
+                                                  headerClass="checkboxMarkAll">
+                                            <f:facet name="header">
+                                                <h:selectBooleanCheckbox
+                                                        title="Clique para marcar/desmarcar todos"
+                                                        value="#{cc.attrs.managedBean.selectedAll}"
+                                                        valueChangeListener="#{cc.attrs.managedBean.selectAll}">
+                                                    <f:ajax execute="@this" render="@form"/>
+                                                </h:selectBooleanCheckbox>
+                                            </f:facet>
+
+                                            <h:selectBooleanCheckbox value="#{bean.selected}"
+                                                                     valueChangeListener="#{cc.attrs.managedBean.selectRow}">
+                                                <f:attribute name="bean" value="#{bean}"/>
+                                                <f:ajax execute="@this"
+                                                        render="@form"/>
+                                            </h:selectBooleanCheckbox>
+
+                                        </h:column>
+
+                                        <composite:insertChildren/>
+                                    </h:dataTable>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+
+    </div>
+</composite:implementation>
+
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+>
+
+<composite:interface>
+
+
+    <composite:attribute name="sLabel" required="false"
+                         shortDescription="Label dp inputtext"/>
+    <composite:attribute name="useConverter" default="false"
+                         shortDescription="Habilita o uso do Converter"/>
+
+    <composite:attribute name="selectValue" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+    <composite:attribute name="inputValue" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+
+    <composite:attribute name="styleClass"
+                         shortDescription="StyleClasses adicionais ao componente InputText"/>
+
+    <composite:attribute name="sOnclick"
+                         shortDescription="On Click"/>
+    <composite:attribute name="sDisabled" default="false"
+                         shortDescription="disable"/>
+    <composite:attribute name="sRendered" type="boolean" default="true"
+                         shortDescription="rendered"/>
+    <composite:attribute name="sRequired" type="boolean" default="false"
+                         shortDescription="required"/>
+    <composite:attribute name="placeholder"/>
+
+</composite:interface>
+
+<composite:implementation>
+
+    <c:if test="#{!cc.attrs.useConverter}">
+        <div class="form-group">
+            <c:if test="#{cc.attrs.sLabel!=null}">
+                <h:outputLabel value="#{cc.attrs.sLabel}"/>
+            </c:if>
+            <div class="input-group">
+            <span class="input-group-addon">
+                <h:selectOneMenu value="#{cc.attrs.selectValue}" style="border: 0px;"
+                                 onclick="#{cc.attrs.sOnclick}"
+                                 disabled="#{cc.attrs.sDisabled}"
+                                 required="#{cc.attrs.sRequired}"
+                                 id="aquilesSelectInputText-Select-NoConverter">
+                  <composite:insertChildren/>
+                </h:selectOneMenu>
+            </span>
+                <h:inputText value="#{cc.attrs.inputValue}" styleClass="form-control"
+                             pt:placeholder="#{cc.attrs.placeholder}"
+                             id="aquilesSelectInputText-Input-NoConverter"/>
+            </div>
+        </div>
+    </c:if>
+    <c:if test="#{cc.attrs.useConverter}">
+        <div class="form-group">
+            <c:if test="#{cc.attrs.sLabel!=null}">
+                <h:outputLabel value="#{cc.attrs.sLabel}"/>
+            </c:if>
+            <div class="input-group">
+            <span class="input-group-addon">
+                <h:selectOneMenu value="#{cc.attrs.selectValue}" style="border: 0px;"
+                                 onclick="#{cc.attrs.sOnclick}"
+                                 converter="omnifaces.SelectItemsConverter"
+                                 disabled="#{cc.attrs.sDisabled}"
+                                 required="#{cc.attrs.sRequired}"
+                                 id="aquilesSelectInputText-Select-WithConverter">
+                  <composite:insertChildren/>
+                </h:selectOneMenu>
+            </span>
+                <h:inputText value="#{cc.attrs.inputValue}" styleClass="form-control"
+                             pt:placeholder="#{cc.attrs.placeholder}"
+                             id="aquilesSelectInputText-Input-WithConverter"/>
+            </div>
+        </div>
+    </c:if>
+</composite:implementation>
+
+</html>

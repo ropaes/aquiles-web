@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core">
+
+<composite:interface>
+    <composite:attribute name="managedBean"
+                         type="br.com.aquiles.web.mb.BasicDetailMB" required="true"
+                         shortDescription="Nome do managedBean do componente"/>
+    <composite:attribute name="widthStepOnPage"
+                         default="3"
+                         shortDescription="Largura de cada etapa na pagina"/>
+</composite:interface>
+
+<composite:implementation>
+    <div class="col-md-12">
+        <div class="stepwizard">
+            <div class="stepwizard-row setup-panel">
+                <c:forEach items="#{cc.attrs.managedBean.stepLabels}" var="label" varStatus="cont">
+                    <div class="stepwizard-step col-md-#{cc.attrs.widthStepOnPage}">
+                        <c:if test="#{cc.attrs.managedBean.step ge cont.count}">
+                            <h:commandLink action="#{cc.attrs.managedBean.stepOn(cont.count)}"
+                                           styleClass="btn #{cc.attrs.managedBean.stepClass(cont.count)} btn-circle"
+                                           value="#{cont.count}">
+                                <f:ajax execute="@this"
+                                        render="@this"/>
+                            </h:commandLink>
+                        </c:if>
+                        <c:if test="#{cc.attrs.managedBean.step lt cont.count}">
+                            <a href="#"
+                               class="btn #{cc.attrs.managedBean.stepClass(cont.count)} btn-circle">#{cont.count}</a>
+                        </c:if>
+                        <p>
+                            <small>#{label}</small>
+                        </p>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+    </div>
+</composite:implementation>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<composite:interface>
+
+    <composite:attribute name="sWithFooter" type="java.lang.Boolean" default="false" shortDescription="com rodape"/>
+    <composite:attribute name="sTitle" type="java.lang.String" required="true" shortDescription="titulo"/>
+    <composite:attribute name="sSubtitle" type="java.lang.String" required="false" shortDescription="subtitulo"/>
+    <composite:attribute name="sMinimize" type="java.lang.Boolean" default="false" shortDescription="minimizar"/>
+    <composite:attribute name="sClosable" type="java.lang.Boolean" default="false" shortDescription="fechar"/>
+    <composite:attribute name="sHeaderBorder" type="java.lang.Boolean" default="true"
+                         shortDescription="borda do cabecalho"/>
+
+    <composite:attribute name="sColor" type="java.lang.String" required="false"
+                         shortDescription="gray,blue,light-blue,yellow,green,red"/>
+    <composite:attribute name="sTopBorder" type="java.lang.Boolean" default="false"
+                         shortDescription="com borda superior"/>
+    <composite:attribute name="sStyleClass" default=""
+                         shortDescription="Adicionar estilo adicional ao componente"/>
+
+    <composite:attribute name="sFontAwesomeIcon" default=""/>
+
+    <composite:attribute name="sLoading" type="java.lang.Boolean" default="false"
+                         shortDescription="efeito loading ativo/inativo"/>
+
+    <composite:attribute name="includeButtons"/>
+
+</composite:interface>
+
+<composite:implementation>
+    <div class="box#{cc.attrs.sTopBorder ? '' : ' box-solid ' }#{cc.attrs.sColor eq 'green' ? ' box-success ' : ''}#{cc.attrs.sColor eq 'red' ? ' box-danger ' : ''}#{cc.attrs.sColor eq 'yellow' ? ' box-warning ' : ''}#{cc.attrs.sColor eq 'light-blue' ? ' box-info ' : ''}#{cc.attrs.sColor eq 'blue' ? ' box-primary ' : ''}#{cc.attrs.sColor eq 'gray' ? ' box-default ' : ''}#{cc.attrs.sStyleClass}" data-widget="box-widget">
+        <div class="box-header #{cc.attrs.sHeaderBorder ? 'with-border' : '' } ">
+            <c:if test="#{not empty cc.attrs.sFontAwesomeIcon}">
+                <i class="#{cc.attrs.sFontAwesomeIcon}"></i>
+            </c:if>
+            <h3 class="box-title">#{cc.attrs.sTitle}
+                <small>#{cc.attrs.sSubtitle}</small>
+            </h3>
+
+            <div class="box-tools">
+                <c:if test="#{cc.attrs.sClosable}">
+                    <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" data-ignore-visu="true"
+                            title="Fechar"><i class="fa fa-times"></i></button>
+                </c:if>
+                <c:if test="#{cc.attrs.sMinimize}">
+                    <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                            data-ignore-visu="true"
+                            title="Minimizar"><i class="fa fa-minus"></i></button>
+                </c:if>
+            </div>
+
+        </div>
+
+        <div class="box-body">
+            <composite:insertChildren/>
+        </div>
+        <c:if test="#{cc.attrs.sWithFooter}">
+            <div class="box-footer">
+                <div class="btn-toolbar">
+                    <ui:include src="#{cc.attrs.includeButtons}"/>
+                </div>
+            </div>
+        </c:if>
+        <c:if test="#{cc.attrs.sLoading}">
+            <div class="overlay">
+                <i class="fa fa-refresh fa-spin"></i>
+            </div>
+        </c:if>
+    </div>
+</composite:implementation>
+</html>

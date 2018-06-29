@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+>
+
+<composite:interface>
+    <composite:attribute name="active" required="true" shortDescription="Nome da página ativa no breadcrumb"/>
+    <composite:attribute name="tituloPagina" default="#{cc.attrs.active}"/>
+</composite:interface>
+<composite:implementation>
+    <section class="content-header">
+        <h1>#{cc.attrs.tituloPagina}</h1>
+        <ol class="breadcrumb">
+            <li>
+                <h:link outcome="/core/index">
+                    <i class="fa fa-dashboard"></i> Página Inicial
+                </h:link>
+            </li>
+            <composite:insertChildren/>
+            <li class="active">#{cc.attrs.active}</li>
+        </ol>
+    </section>
+</composite:implementation>
+</html>

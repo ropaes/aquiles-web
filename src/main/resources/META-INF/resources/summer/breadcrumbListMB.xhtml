@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:aquiles="http://java.sun.com/jsf/composite/aquiles">
+
+<composite:interface>
+    <composite:attribute name="prefixoPaginaAtiva"/>
+    <composite:attribute name="prefixoTituloPagina"/>
+    <composite:attribute name="managedBean" type="br.com.aquiles.web.mb.BasicListMB" required="true"/>
+    <composite:attribute name="mostrarAjuda" default="false"/>
+    <composite:attribute name="posicaoAjuda" shortDescription="bottom,top,left,right. Padrão=bottom" default="bottom"/>
+    <composite:attribute name="mensagemAjuda" required="#{cc.attrs.mostrarAjuda==true}"/>
+</composite:interface>
+<composite:implementation>
+    <aquiles:breadcrumbMB managedBean="#{cc.attrs.managedBean}" prefixoTituloPagina="#{cc.attrs.prefixoTituloPagina}"
+                         mostrarAjuda="#{cc.attrs.mostrarAjuda}" posicaoAjuda="#{cc.attrs.posicaoAjuda}"
+                         mensagemAjuda="#{cc.attrs.mensagemAjuda}"
+                         prefixoPaginaAtiva=" #{cc.attrs.managedBean.getDescricaoFuncao('RETR')}">
+        <composite:insertChildren/>
+    </aquiles:breadcrumbMB>
+
+</composite:implementation>
+</html>

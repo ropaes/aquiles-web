@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ptf="http://xmlns.jcp.org/jsf/core">
+
+<composite:interface>
+    <composite:attribute name="sLabel" required="true"
+                         shortDescription="Label dp inputtext"/>
+
+    <composite:attribute name="value" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+
+    <composite:attribute name="styleClass"
+                         shortDescription="StyleClasses adicionais ao componente InputText"/>
+    <composite:attribute name="sOnclick"
+                         shortDescription="On Click"/>
+    <composite:attribute name="sDisabled" default="false"
+                         shortDescription="disable"/>
+    <composite:attribute name="sRendered" default="true" type="boolean"
+                         shortDescription="rendered"/>
+    <composite:attribute name="sRequired" default="false" type="boolean"
+                         shortDescription="required"/>
+    <composite:attribute name="sRequiredMessage" default="O campo #{cc.attrs.sLabel} é obrigatório"
+                         shortDescription="requiredMessage"/>
+    <composite:attribute name="placeholder"/>
+    <composite:attribute name="sAddon" required="false" shortDescription="texto para input-group-addon"/>
+    <composite:attribute name="sHelpText" required="false" default=""
+                         shortDescription="incluir texto de ajuda abaixo do inputText"/>
+    <composite:attribute name="sAutoFocus" default="false" type="java.lang.Boolean"/>
+</composite:interface>
+
+<composite:implementation>
+    <c:if test="#{cc.attrs.sRendered and cc.attrs.sAddon==null}">
+        <div class="form-group">
+            <h:outputLabel value="#{cc.attrs.sLabel} #{cc.attrs.sRequired?' *':''}"/>
+            <div class="input-group">
+                <span class="input-group-addon">R$</span>
+                <h:inputText value="#{cc.attrs.value}" pt:placeholder="#{cc.attrs.placeholder}"
+                             styleClass="form-control money-mask #{cc.attrs.styleClass}" onclick="#{cc.attrs.sOnclick}"
+                             disabled="#{cc.attrs.sDisabled}" requiredMessage="#{cc.attrs.sRequiredMessage}"
+                             required="#{cc.attrs.sRequired}"
+                             id="aquilesInputMonetaryNoAddon">
+                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
+                    <c:if test="#{cc.attrs.sAutoFocus}">
+                        <ptf:passThroughAttribute name="autofocus" value="autofocus"/>
+                    </c:if>
+                    <composite:insertChildren/>
+                </h:inputText>
+            </div>
+            <c:if test="#{not empty cc.attrs.sHelpText}">
+                <span class="help-block">#{cc.attrs.sHelpText}</span>
+            </c:if>
+        </div>
+    </c:if>
+    <c:if test="#{cc.attrs.sRendered and !empty cc.attrs.sAddon}">
+        <div class="form-group">
+            <h:outputLabel value="#{cc.attrs.sLabel}"/>
+            <div class="input-group">
+                <span class="input-group-addon"><h:outputText value="#{cc.attrs.sAddon}"/> </span>
+                <h:inputText value="#{cc.attrs.value}" pt:placeholder="#{cc.attrs.placeholder}"
+                             styleClass="form-control money-mask #{cc.attrs.styleClass}" onclick="#{cc.attrs.sOnclick}"
+                             disabled="#{cc.attrs.sDisabled}" requiredMessage="#{cc.attrs.sRequiredMessage}"
+                             required="#{cc.attrs.sRequired}"
+                             id="aquilesInputMonetaryWithAddon">
+                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
+                    <c:if test="#{cc.attrs.sAutoFocus}">
+                        <ptf:passThroughAttribute name="autofocus" value="autofocus"/>
+                    </c:if>
+                    <composite:insertChildren/>
+                </h:inputText>
+            </div>
+            <c:if test="#{not empty cc.attrs.sHelpText}">
+                <span class="help-block">#{cc.attrs.sHelpText}</span>
+            </c:if>
+        </div>
+    </c:if>
+
+</composite:implementation>
+
+</html>

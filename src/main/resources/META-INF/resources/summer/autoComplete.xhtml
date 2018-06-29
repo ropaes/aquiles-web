@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<composite:interface>
+    <composite:attribute name="sLabel" required="true"
+                         shortDescription="Label do autocomplete"/>
+    <composite:attribute name="beanPropertyLabel" required="true"
+                         shortDescription="Nome da propriedade no bean que será mostrado na listagem"/>
+    <composite:attribute name="beanPropertyValue" required="true"
+                         shortDescription="Nome da propriedade que será enviada ao método beanSelectedMethod"/>
+    <composite:attribute name="valueFilter" required="true"
+                         shortDescription="Atributo no ManagedBean que armazenará o filtro digitado"/>
+    <composite:attribute name="beansFilter" required="true"
+                         shortDescription="Beans que serão retornados após o filtro bem sucedido"/>
+    <composite:attribute name="sRequired" default="false" type="boolean"
+                         shortDescription="required"/>
+    <composite:attribute name="sDisabled" default="false" type="boolean"/>
+    <composite:attribute name="sRequiredMessage"
+                         shortDescription="requiredMessage"/>
+    <composite:attribute name="uppercase" default="false"/>
+    <composite:attribute name="sRender" default=""/>
+    <composite:attribute name="sRendered" default="true"/>
+    <composite:attribute name="sPlaceholder" default=""/>
+    <composite:attribute name="sStyleClass"
+                         shortDescription="StyleClasses adicionais ao componente"/>
+
+    <composite:attribute name="beanSelectedMethod" required="true" method-signature="void method()"/>
+    <composite:attribute name="actionListenerFind" required="true" method-signature="void method()"
+                         shortDescription="ActionListener que será chamada para buscar os beans"/>
+
+    <composite:attribute name="useInsertChildren" required="false" default="false"/>
+
+</composite:interface>
+
+<composite:implementation>
+    <h:panelGroup rendered="#{cc.attrs.sRendered}">
+        <div class="form-group">
+            <h:outputLabel value="#{cc.attrs.sLabel} #{cc.attrs.sRequired?' *':''}"/>
+            <div class="input-group">
+
+                <h:panelGroup rendered="#{cc.attrs.sDisabled}">
+                        <span class="input-group-addon" style="background: #eee">
+                    <i class="fa fa-search" aria-hidden="true"
+                       title="Clique para buscar ou digite ao lado o valor que deseja buscar"></i>
+                        </span>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{not cc.attrs.sDisabled}">
+                    <span class="input-group-addon">
+                    <i class="fa fa-search" aria-hidden="true"
+                       style="cursor:pointer;"
+                       onclick="fireSearchAutoComplete(this)"
+                       title="Clique para buscar ou digite ao lado o valor que deseja buscar"></i>
+                    </span>
+                </h:panelGroup>
+
+
+                <div class="form-group">
+                    <h:inputText value="#{cc.attrs.valueFilter}" autocomplete="off"
+                                 pt:placeholder="#{cc.attrs.sPlaceholder}"
+                                 id="iptFilter" disabled="#{cc.attrs.sDisabled}"
+                                 styleClass="form-control autocomplete-search #{cc.attrs.uppercase ? 'aquiles-uppercase' : ''} #{cc.attrs.sStyleClass}">
+                        <c:if test="#{cc.attrs.uppercase}">
+                            <f:converter converterId="omnifaces.ToUpperCaseConverter" />
+                        </c:if>
+                    </h:inputText>
+                    <div class="autocomplete-container" style="display: none;">
+                        <h:dataTable value="#{cc.attrs.beansFilter}" var="bean"
+                                     id="tableAutoComplete"
+                                     styleClass="display responsive nowrap table table-bordered dataTable table-striped autocomplete-datatable">
+                            <h:column>
+                                <h:commandLink onclick="hideAutocompleteTable()">
+                                    <h:outputText value="#{cc.attrs.beanPropertyLabel}" escape="false"/>
+                                    <f:ajax event="click"
+                                            render="#{':'.concat(cc.clientId).concat(':iptFilter')} #{cc.attrs.sRender}"
+                                            execute="@this" listener="#{cc.attrs.beanSelectedMethod}"/>
+                                    <f:param name="beanPropertyValue" value="#{cc.attrs.beanPropertyValue}"/>
+                                </h:commandLink>
+                            </h:column>
+                        </h:dataTable>
+                    </div>
+                    <h:commandButton actionListener="#{cc.attrs.actionListenerFind}"
+                                     style="display: none">
+                        <f:ajax execute="#{':'.concat(cc.clientId).concat(':iptFilter')}"
+                                onevent="callLoading"
+                                render="#{':'.concat(cc.clientId).concat(':tableAutoComplete')}"/>
+                    </h:commandButton>
+                </div>
+                <h:panelGroup rendered="#{cc.attrs.useInsertChildren}">
+                    <span class="input-group-addon"><composite:insertChildren/></span>
+                </h:panelGroup>
+            </div>
+        </div>
+    </h:panelGroup>
+</composite:implementation>
+
+</html>

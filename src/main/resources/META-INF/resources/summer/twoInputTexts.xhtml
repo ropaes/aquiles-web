@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+>
+
+<composite:interface>
+
+
+    <composite:attribute name="sLabel" required="false"
+                         shortDescription="Label dp inputtext"/>
+    <composite:attribute name="useConverter" default="false"
+                         shortDescription="Habilita o uso do Converter"/>
+
+    <composite:attribute name="inputValue1" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+    <composite:attribute name="inputValue2" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+
+    <composite:attribute name="sStyleClass1"
+                         shortDescription="StyleClasses adicionais ao componente InputText"/>
+    <composite:attribute name="sStyleClass2"
+                         shortDescription="StyleClasses adicionais ao componente InputText"/>
+
+    <composite:attribute name="sMaxlength1" default="999999"
+                         shortDescription="maxlength"/>
+    <composite:attribute name="sMaxlength2" default="999999"
+                         shortDescription="maxlength"/>
+
+    <composite:attribute name="sOnclick"
+                         shortDescription="On Click"/>
+    <composite:attribute name="sDisabled" default="false"
+                         shortDescription="disable"/>
+    <composite:attribute name="sRendered" type="boolean" default="true"
+                         shortDescription="rendered"/>
+    <composite:attribute name="sRequired1" type="boolean" default="false"
+                         shortDescription="required"/>
+    <composite:attribute name="sRequired2" type="boolean" default="false"
+                         shortDescription="required"/>
+    <composite:attribute name="placeholder1"/>
+    <composite:attribute name="placeholder2"/>
+
+</composite:interface>
+
+<composite:implementation>
+
+    <c:if test="#{cc.attrs.sRendered}">
+        <div class="form-group">
+            <c:if test="#{cc.attrs.sLabel!=null}">
+                <h:outputLabel value="#{cc.attrs.sLabel} #{cc.attrs.sRequired?' *':''}"/>
+            </c:if>
+            <div class="input-group">
+                <h:inputText value="#{cc.attrs.inputValue1}" styleClass="form-control #{cc.attrs.sStyleClass1}"
+                             pt:placeholder="#{cc.attrs.placeholder1}" maxlength="#{cc.attrs.sMaxlength1}"
+                             required="#{cc.attrs.sRequired1}"
+                             requiredMessage="campo #{cc.attrs.sLabel} é requerido"
+                             id="aquilesTwoInputTexts1"/>
+                <span class="input-group-addon" style="border: 0px;"/>
+                <h:inputText value="#{cc.attrs.inputValue2}" styleClass="form-control #{cc.attrs.sStyleClass2}"
+                             maxlength="#{cc.attrs.sMaxlength2}"
+                             required="#{cc.attrs.sRequired2}"
+                             pt:placeholder="#{cc.attrs.placeholder2}"
+                             requiredMessage="campo #{cc.attrs.sLabel} é requerido"
+                             id="aquilesTwoInputTexts2"/>
+            </div>
+        </div>
+    </c:if>
+
+</composite:implementation>
+</html>

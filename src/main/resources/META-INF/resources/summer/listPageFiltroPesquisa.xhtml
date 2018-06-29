@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+<composite:interface>
+
+
+    <composite:attribute name="actionListener" required="true"
+                         shortDescription="ActionListener que sera chamada para buscar os dados de acordo com os valores do filtro"
+                         method-signature="void actionListener()"/>
+
+    <composite:attribute name="renderTarget" default="@all"
+                         shortDescription="Id do componente que deve ser renderizado apos clicar no botão buscar"/>
+
+    <composite:attribute name="managedBean"
+                         type="br.com.aquiles.web.mb.BasicListMB" required="true"
+                         shortDescription="Nome do managedBean que sera usado para marcar o botão de buscar para buscarTodos ou não"/>
+
+    <composite:attribute name="onEventSearch" default="callLoading"
+                         shortDescription="Evento que deverá ser chamado no AJAX do botão buscar. Padrão 'callLoading'"/>
+    <composite:attribute name="btnSearchId" shortDescription="Id para o botão buscar" default="btnSearchId"/>
+
+</composite:interface>
+
+<composite:implementation>
+    <h:panelGroup rendered="#{utilMB.isComponentePermitidoActivePageRETR()}">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">Filtro de Pesquisa</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool"
+                            data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <composite:insertChildren/>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="btn-group pull-right">
+                            <h:commandLink actionListener="#{cc.attrs.actionListener}"
+                                           action="#{cc.attrs.managedBean.clearSelected}"
+                                           class="btn btn-labeled btn-default"
+                                           id="#{cc.attrs.btnSearchId}"
+                                           title="Clique para buscar">
+                                <f:ajax execute="@form" render="@form" onevent="#{cc.attrs.onEventSearch}"/>
+                                <span class="btn-label">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </span>
+                                Buscar
+                            </h:commandLink>
+                            <h:commandLink
+                                    action="list" class="btn btn-labeled btn-default"
+                                    title="Clique para limpar esta tela" id="aquilesButtonClean">
+                                <span class="btn-label">
+                                    <i class="fa fa-eraser" aria-hidden="true"></i>
+                                </span>
+                                Limpar
+                            </h:commandLink>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+        </div>
+    </h:panelGroup>
+
+</composite:implementation>
+
+</html>

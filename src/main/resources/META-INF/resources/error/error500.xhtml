@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+    <meta content="ERROR PAGE"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>500 Erro Interno do Servidor</title>
+    <h:outputStylesheet name="css/error.css"/>
+
+</h:head>
+<h:body>
+    <div class="page-container page-container-responsive">
+        <div class="row space-top-8 space-8 row-table">
+            <div class="col-5 col-middle">
+                <h1 class="text-jumbo text-ginormous">Ops!</h1>
+                <h2>Não conseguimos processar sua página, tente mais tarde.</h2>
+                <h6>ERRO: 500</h6>
+                <p>
+                    <i>#{utilMB.serverDate}</i>
+                </p>
+            </div>
+            <div class="col-5 col-middle text-center">
+                <h:graphicImage name="image/error-avatar-gif.gif" width="313" height="428"/>
+            </div>
+        </div>
+    </div>
+</h:body>
+</html>
+

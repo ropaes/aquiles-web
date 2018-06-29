@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+        http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+              version="2.2">
+
+    <lifecycle>
+        <phase-listener>br.com.aquiles.web.util.MultiPageMessagesSupport</phase-listener>
+        <phase-listener>br.com.aquiles.web.util.JsfPhaseListener</phase-listener>
+    </lifecycle>
+
+    <application>
+        <locale-config>
+            <default-locale>pt_BR</default-locale>
+        </locale-config>
+        <resource-handler>org.omnifaces.resourcehandler.UnmappedResourceHandler</resource-handler>
+    </application>
+
+    <render-kit>
+        <renderer>
+            <component-family>javax.faces.Messages</component-family>
+            <renderer-type>javax.faces.Messages</renderer-type>
+            <renderer-class>br.com.aquiles.web.util.BootstrapMessagesRenderer</renderer-class>
+        </renderer>
+    </render-kit>
+
+</faces-config>

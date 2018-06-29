@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+>
+
+<composite:interface>
+    <composite:attribute name="label" required="true"
+                         shortDescription="Component label"/>
+
+    <composite:attribute name="value" required="true"
+                         shortDescription="Component value"/>
+
+</composite:interface>
+
+<composite:implementation>
+    <div class="form-group">
+        <label>#{cc.attrs.label}</label>
+        <div id="aquilesnote">#{cc.attrs.value}</div>
+    </div>
+    <h:inputText value="#{cc.attrs.value}" id="aquilesnote_input" style="display: none" />
+</composite:implementation>
+
+</html>

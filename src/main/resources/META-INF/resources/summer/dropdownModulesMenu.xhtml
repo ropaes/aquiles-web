@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+>
+
+<composite:interface>
+</composite:interface>
+<composite:implementation>
+    <li class="dropdown messages-menu"><a href="#"
+                                          title="Clique para selecionar um modulo"
+                                          class="dropdown-toggle"
+                                          data-toggle="dropdown"> <i class="fa fa-th"
+                                                                     aria-hidden="true"></i>
+    </a>
+
+        <ul class="dropdown-menu">
+            <li class="header">
+                <div class="arrow-up"/>
+                Modulos
+            </li>
+            <li>
+                <!-- inner menu: contains the actual data -->
+                <div class="slimScrollMessages modulos_mosaico"
+                     style="position: relative; overflow: hidden; width: auto; height: 200px;">
+                    <ul>
+                        <li onclick="window.location='/acw/core/index.xhtml'"><h:graphicImage
+                                width="40" height="40"
+                                name="/image/logo_modulos/alegacao_de_sacado.png"/>
+                            <div>Alegacao de Sacados</div>
+                        </li>
+                        <li onclick="window.location='/acw/core/index.xhtml'"><h:graphicImage
+                                width="40" height="40"
+                                name="/image/logo_modulos/cobranca_logo.png"/>
+                            <div>Cobrança Web</div>
+                        </li>
+                        <li onclick="window.location='/acw/core/index.xhtml'"><h:graphicImage
+                                width="40" height="40"
+                                name="/image/logo_modulos/gestao_de_comportamento.png"/>
+                            <div>Analise do Sacado</div>
+                        </li>
+                        <li onclick="window.location='/acw/core/index.xhtml'"><h:graphicImage
+                                width="40" height="40"
+                                name="/image/logo_modulos/protesto.png"/>
+                            <div>Protesto</div>
+                        </li>
+                        <li onclick="window.location='/acw/core/index.xhtml'"><h:graphicImage
+                                width="40" height="40"
+                                name="/image/logo_modulos/cobranca_logo.png"/>
+                            <div>Cobrança Web</div>
+                        </li>
+                        <li onclick="window.location='/acw/core/index.xhtml'"><h:graphicImage
+                                width="40" height="40"
+                                name="/image/logo_modulos/cobranca_logo.png"/>
+                            <div>Cobrança Web</div>
+                        </li>
+                    </ul>
+
+                </div>
+            </li>
+            <li class="footer"><a href="#">Ver todos os modulos</a></li>
+        </ul>
+    </li>
+</composite:implementation>
+</html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<composite:interface>
+    <composite:attribute name="includeMenu" default=""/>
+</composite:interface>
+<composite:implementation>
+    <ul class="sidebar-menu">
+        <li class="header">MENU</li>
+        <h:panelGroup rendered="#{not empty cc.attrs.includeMenu}">
+            <ui:include src="#{cc.attrs.includeMenu}"/>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{empty cc.attrs.includeMenu}">
+            <!-- Optionally, you can add icons to the links -->
+            <ui:repeat value="#{utilMB.menus}" var="menu">
+                <h:panelGroup rendered="#{not empty menu.childs and not menu.docAsTran}">
+                    <li class="treeview"><a href="#"><i class="#{menu.awesomeClass}"></i>
+                        <span>#{menu.descricao}</span> <i
+                                class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu">
+                            <ui:repeat value="#{menu.childs}" var="child">
+                                <li><h:link
+                                        outcome="#{'/core/'.concat(menu.siglaDoc).concat('/').concat(child.siglaTran).concat('/index.xhtml')}">#{child.descricao}</h:link>
+                                </li>
+                            </ui:repeat>
+                        </ul>
+                    </li>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{empty menu.childs}">
+                    <li><h:link
+                            outcome="#{'/core/'.concat(menu.siglaDoc).concat('/').concat(menu.siglaTran).concat('/index.xhtml')}">
+                        <i class="#{menu.awesomeClass}" aria-hidden="true"></i>
+                        <span>#{menu.descricao}</span>
+                    </h:link></li>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{not empty menu.childs and menu.docAsTran}">
+                    <li><h:link
+                            outcome="#{'/core/'.concat(menu.siglaDoc).concat('/').concat(menu.childs[0].siglaTran).concat('/index.xhtml')}">
+                        <i class="#{menu.awesomeClass}" aria-hidden="true"></i>
+                        <span>#{menu.descricao}</span>
+                    </h:link></li>
+                </h:panelGroup>
+
+            </ui:repeat>
+        </h:panelGroup>
+    </ul>
+</composite:implementation>
+</html>

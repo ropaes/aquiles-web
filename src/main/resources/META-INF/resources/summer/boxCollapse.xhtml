@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+>
+
+<composite:interface>
+    <composite:attribute name="boxID" type="java.lang.String"/>
+    <composite:attribute name="boxHeaderLabel" type="java.lang.String"/>
+    <composite:attribute name="fontAwesomeIcon" default="fa fa-archive"/>
+    <composite:attribute name="collapsed" type="java.lang.Boolean" default="false"/>
+</composite:interface>
+
+<composite:implementation>
+    <div id="#{cc.attrs.boxID}" class="box box-default #{cc.attrs.collapsed?'collapsed-box':''}">
+        <div class="box-header with-border">
+            <i class="#{cc.attrs.fontAwesomeIcon}"></i>
+            <h3 class="box-title">#{cc.attrs.boxHeaderLabel}</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" id="btnCollapse#{cc.attrs.boxID}"
+                        data-widget="collapse" data-ignore-visu="true">
+                    <i class="fa #{cc.attrs.collapsed?'fa-plus':'fa-minus'}"></i>
+                </button>
+            </div>
+        </div>
+        <div id="#{cc.attrs.boxID}Body" class="box-body">
+            <composite:insertChildren/>
+        </div>
+    </div>
+</composite:implementation>
+</html>

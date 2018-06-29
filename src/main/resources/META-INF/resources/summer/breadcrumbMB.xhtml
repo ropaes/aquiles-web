@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+>
+
+<composite:interface>
+    <composite:attribute name="prefixoPaginaAtiva" default=""/>
+    <composite:attribute name="prefixoTituloPagina" default=""/>
+    <composite:attribute name="managedBean" type="br.com.aquiles.web.mb.AbstractMB" required="true"/>
+    <composite:attribute name="mostrarAjuda" default="false"/>
+    <composite:attribute name="posicaoAjuda" shortDescription="bottom,top,left,right. Padrão=bottom" default="bottom"/>
+    <composite:attribute name="mensagemAjuda" required="#{cc.attrs.mostrarAjuda==true}"/>
+</composite:interface>
+<composite:implementation>
+    <section class="content-header">
+        <h1>#{cc.attrs.prefixoTituloPagina} #{cc.attrs.managedBean.descricaoTransacao}
+            <h:panelGroup rendered="#{cc.attrs.mostrarAjuda}">
+                <button type="button" class="btn btn-box-tool">
+                    <i data-toggle="tooltip" data-placement="#{cc.attrs.posicaoAjuda}" data-html="true"
+                       title="#{cc.attrs.mensagemAjuda}"
+                       class="fa fa-question-circle fa-lg"
+                       aria-hidden="true"></i>
+                </button>
+            </h:panelGroup></h1>
+        <ol class="breadcrumb">
+            <li>
+                <h:link outcome="/core/index">
+                    <i class="fa fa-dashboard"></i> Página Inicial
+                </h:link>
+            </li>
+            <composite:insertChildren/>
+            <li class="active">#{cc.attrs.prefixoPaginaAtiva} #{cc.attrs.managedBean.descricaoTransacao}</li>
+        </ol>
+    </section>
+</composite:implementation>
+</html>

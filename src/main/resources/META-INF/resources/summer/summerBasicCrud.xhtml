@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:aquiles="http://java.sun.com/jsf/composite/aquiles"
+>
+
+<composite:interface>
+    <composite:attribute name="managedBean"
+                         type="br.com.aquiles.web.mb.BasicDetailMB" required="true"
+                         shortDescription="Nome do managedBean do componente"/>
+</composite:interface>
+
+<composite:implementation>
+    <ui:composition template="/template/template.xhtml">
+        <ui:define name="content">
+            <aquiles:breadcrumb active="Cadastro Notificação">
+                <aquiles:breadcrumbPath page="Notificações" outcome="list"/>
+            </aquiles:breadcrumb>
+            <aquiles:detailPage titulo="Mensagem" id="aquilesDetailPage"
+                               managedBeanName="#{cc.attrs.managedBean}">
+                <aquiles:detailPageBody id="aquilesDetailPageBody">
+                    <h:outputText value="#{cc.attrs.managedBean.buildPage(cc.attrs.managedBean)}" escape="false"/>
+                    <aquiles:detailPageFooter managedBean="#{cc.attrs.managedBean}"
+                                             sExecute="@form"
+                                             outcomeOnFinish="list"/>
+                </aquiles:detailPageBody>
+
+            </aquiles:detailPage>
+        </ui:define>
+    </ui:composition>
+</composite:implementation>
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<composite:interface>
+    <composite:attribute name="targetPageMeusDados" required="false"/>
+    <composite:attribute name="actionListenerLogout" default="#{utilMB.doLogout}"
+                         method-signature="java.lang.String logout()"/>
+    <composite:attribute name="renderButtonMeusDados" default="true"/>
+</composite:interface>
+<composite:implementation>
+    <li class="dropdown user user-menu">
+        <!-- Menu Toggle Button --> <a href="#" class="dropdown-toggle"
+                                       data-toggle="dropdown"> <!-- The user image in the navbar-->
+        <h:graphicImage styleClass="user-image" name="image/avatar.png"/>
+        <!-- hidden-xs hides the username on small devices so only the image appears. -->
+        <span class="hidden-xs">#{utilMB.subject.login}</span>
+    </a>
+        <ul class="dropdown-menu">
+            <!-- The user image in the menu -->
+            <li class="user-header"><h:graphicImage
+                    styleClass="img-circle" name="image/avatar.png"/>
+                <p>
+                    <composite:insertChildren/>
+                </p>
+            </li>
+            <!-- Menu Footer-->
+            <li class="user-footer"><h:form id="frmLogout">
+                <div class="pull-left">
+                    <h:link styleClass="btn btn-default btn-flat"
+                            pt:data-ignore-visu="true"
+                            rendered="#{cc.attrs.renderButtonMeusDados}"
+                            outcome="#{cc.attrs.targetPageMeusDados}">Meus dados</h:link>
+                </div>
+                <div class="pull-right">
+                    <h:commandLink value="Sair" action="#{cc.attrs.actionListenerLogout}"
+                                   pt:data-ignore-visu="true"
+                                   onclick="if (!confirm('Tem certeza que deseja sair ?')){return false;}"
+                                   styleClass="btn btn-default btn-flat"/>
+                </div>
+            </h:form></li>
+        </ul>
+    </li>
+</composite:implementation>
+</html>

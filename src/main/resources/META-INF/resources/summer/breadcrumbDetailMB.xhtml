@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:aquiles="http://java.sun.com/jsf/composite/aquiles">
+
+<composite:interface>
+    <composite:attribute name="prefixoPaginaAtiva"/>
+    <composite:attribute name="prefixoTituloPagina"/>
+    <composite:attribute name="managedBean" type="br.com.aquiles.web.mb.BasicDetailMB" required="true"/>
+</composite:interface>
+<composite:implementation>
+    <aquiles:breadcrumbMB managedBean="#{cc.attrs.managedBean}" prefixoTituloPagina="#{cc.attrs.prefixoTituloPagina}"
+                         prefixoPaginaAtiva="#{cc.attrs.managedBean.getDescricaoFuncao(cc.attrs.managedBean.action)}">
+        <aquiles:breadcrumbPath
+                page="#{cc.attrs.managedBean.getDescricaoFuncao('RETR')} #{cc.attrs.managedBean.descricaoTransacao}"
+                outcome="list"/>
+    </aquiles:breadcrumbMB>
+</composite:implementation>
+</html>

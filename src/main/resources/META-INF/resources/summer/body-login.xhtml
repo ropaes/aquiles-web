@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:aquiles="http://java.sun.com/jsf/composite/aquiles" xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<composite:interface>
+    <composite:attribute name="projectName" shortDescription="Nome do projeto que aparecerá no rodapé"/>
+    <composite:attribute name="projectVersion" shortDescription="Versão do projeto que aparecerá no rodapé"/>
+    <composite:attribute name="logoPath" shortDescription="Caminho da logomarca que será carregada no template"
+                         required="true"/>
+    <composite:attribute name="showDefaultLoginFields"
+                         shortDescription="Mostra os campos de login padrão, que são 'login' e 'senha'" default="true"/>
+    <composite:attribute name="showDefaultLoginButtons"
+                         shortDescription="Mostra os botões padrões da tela de login: 'entrar' e 'esqueci senha'"
+                         default="true"/>
+    <composite:attribute name="logoWidth" shortDescription="Largura da logomarca"
+                         default="70"/>
+    <composite:attribute name="logoHeight" shortDescription="Altura da logomarca"
+                         default="45"/>
+    <composite:attribute name="loginMethod" shortDescription="Método que irá realizar o login"
+                         method-signature="java.lang.String doLogin()"
+                         default="#{utilMB.doLogin}"/>
+    <composite:attribute name="loginBoxMsg"
+                         shortDescription="Mensagem que irá ser apresentada no box principal da tela de login"
+                         default="Informe os dados para iniciar a sessão"/>
+    <composite:attribute name="includeButtons"/>
+
+    <!-- Forget password -->
+    <composite:attribute name="actionForgetPassword" shortDescription="action to target the forget password page"
+                         method-signature="java.lang.String forgetPassword()"/>
+    <composite:attribute name="showForgetPassword" shortDescription="show the link to forget password page"/>
+
+    <composite:attribute name="showProjectName" default="true"/>
+    <composite:attribute name="showProjectVersion" default="true"/>
+    <composite:attribute name="showProjectVersionOnBottom" default="false"/>
+</composite:interface>
+<composite:implementation>
+    <h:body styleClass="hold-transition login-page">
+
+        <h:outputText value="#{utilMB.autoCloseAlertMessage}" id="OUTPUTTEXT_AUTOCLOSEALERTMESSAGE_AQUILES"
+                      style="display: none"/>
+
+        <div class="login-box">
+            <aquiles:messages/>
+
+            <div class="login-logo">
+                <h:graphicImage name="#{cc.attrs.logoPath}" width="#{cc.attrs.logoWidth}"
+                                height="#{cc.attrs.logoHeight}" style="margin-top:4px"/>
+                <h:outputText value="#{cc.attrs.projectName}" rendered="#{cc.attrs.showProjectName}"/>
+                <h:panelGroup rendered="#{cc.attrs.showProjectVersion}">
+                <span style="font-size: 12px; font-align: center;">ver
+                    #{cc.attrs.projectVersion} </span>
+                </h:panelGroup>
+
+            </div>
+            <!-- /.login-logo -->
+            <div class="login-box-body">
+                <p class="login-box-msg">#{cc.attrs.loginBoxMsg}</p>
+                <h:form enctype="multipart/form-data" id="frmBodyLogin">
+                    <composite:insertChildren/>
+                    <h:panelGroup rendered="#{cc.attrs.showDefaultLoginFields}">
+                        <div class="form-group has-feedback">
+                            <h:inputText value="#{utilMB.login}" styleClass="form-control"
+                                         pt:placeholder="Digite seu usuário"
+                                         id="aquilesBodyLoginInputTextUser"/> <span
+                                class="glyphicon glyphicon-user form-control-feedback"></span>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <h:inputSecret value="#{utilMB.senha}" styleClass="form-control" id="iptSecret"
+                                           onkeypress="clickButtonOnEnter(event)"
+                                           pt:data-clickonenter-contains-id="btnEntrar"
+                                           pt:placeholder="Digite sua senha"/><span
+                                class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{!cc.attrs.showDefaultLoginButtons}">
+                        <div class="row">
+                            <hr/>
+                            <ui:include src="#{cc.attrs.includeButtons}"/>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{cc.attrs.showDefaultLoginButtons}">
+                        <div class="row">
+
+                            <hr/>
+                            <!-- /.col -->
+                            <div class="col-xs-4">
+                                <h:commandLink action="#{cc.attrs.loginMethod}" id="btnEntrar"
+                                               styleClass="btn btn-default btn-block btn-flat">
+                                    <i class="fa fa-sign-in" aria-hidden="true"></i> Entrar
+                                </h:commandLink>
+                            </div>
+                        </div>
+                        <h:panelGroup rendered="#{cc.attrs.showForgetPassword}">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h:commandLink action="#{cc.attrs.actionForgetPassword}"
+                                                   value="Esqueci minha senha"
+                                                   id="aquilesBodyLoginCommandLinkForgetPass">
+                                        <f:ajax execute="@this"/>
+                                    </h:commandLink>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{cc.attrs.showProjectVersionOnBottom}">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div style="font-size: 10px;text-align:center;"><b>ver.</b> #{cc.attrs.projectVersion}
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </h:form>
+            </div>
+            <!-- /.login-box-body -->
+        </div>
+
+        <!-- /.login-box -->
+
+        <!-- jQuery 2.1.4 -->
+        <h:outputScript name="third/plugins/jQuery/jQuery-2.1.4.min.js"/>
+
+        <!-- Bootstrap 3.3.5 -->
+        <h:outputScript name="third/bootstrap/js/bootstrap.min.js"/>
+
+        <h:outputScript name="third/dist/js/jquery.mask.min.js"/>
+        <h:outputScript library="javax.faces" name="jsf.js"/>
+
+        <!-- jquery confirm -->
+        <h:outputScript name="third/plugins/jquery-confirm/jquery-confirm.min.js"/>
+
+        <h:outputScript name="js/aquiles.js"/>
+        <h:outputScript name="js/aquiles-login.js"/>
+    </h:body>
+</composite:implementation>
+</html>

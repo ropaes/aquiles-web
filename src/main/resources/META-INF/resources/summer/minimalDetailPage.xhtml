@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:aquiles="http://java.sun.com/jsf/composite/aquiles"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<composite:interface>
+    <composite:attribute name="managedBean"
+                         type="br.com.aquiles.web.mb.BasicDetailMB" required="true"
+                         shortDescription="Nome do managedBean que será usado na página"/>
+    <composite:attribute name="titulo" type="String"
+                         default="#{cc.attrs.managedBeanName.getDescricaoFuncao(cc.attrs.managedBeanName.action)}"
+                         shortDescription="TItula da pagina"/>
+    <composite:attribute name="disableAllOnVisuFunc" default="true"
+                         shortDescription="Desabilita todos os campos INPUT quando a função for VISU"/>
+</composite:interface>
+
+<composite:implementation>
+    <aquiles:breadcrumbDetailMB managedBean="#{cc.attrs.managedBean}"/>
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">#{cc.attrs.titulo}</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <h:panelGroup styleClass="panelGroupVisuExist"
+                                  rendered="#{cc.attrs.disableAllOnVisuFunc and cc.attrs.managedBeanName.action eq 'VISU'}">
+                    </h:panelGroup>
+                    <h:form id="frmDetalhe" enctype="multipart/form-data">
+                        <div class="box-body">
+                            <composite:insertChildren/>
+                        </div>
+                        <aquiles:detailPageFooter id="detailPageFooter" managedBean="#{cc.attrs.managedBean}"
+                                                 outcomeOnFinish="list"/>
+                    </h:form>
+                </div>
+                <!-- /.box -->
+
+            </div>
+
+        </div>
+        <!-- /.row --> </section>
+</composite:implementation>
+
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<composite:interface>
+    <composite:attribute name="sLabel" required="true"
+                         shortDescription="Label dp inputtext"/>
+
+    <composite:attribute name="value" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+
+    <composite:attribute name="sStyleClass"
+                         shortDescription="StyleClasses adicionais ao componente InputText"/>
+    <composite:attribute name="sOnclick"
+                         shortDescription="On Click"/>
+    <composite:attribute name="sDisabled" default="false"
+                         shortDescription="disable"/>
+    <composite:attribute name="sRendered" default="true" type="boolean"
+                         shortDescription="rendered"/>
+    <composite:attribute name="sRequired" default="false" type="boolean"
+                         shortDescription="required"/>
+    <composite:attribute name="sRequiredMessage"
+                         shortDescription="requiredMessage"/>
+    <composite:attribute name="sMaxlength" default="999999"
+                         shortDescription="maxlength"/>
+    <composite:attribute name="placeholder"/>
+    <composite:attribute name="sAddon" required="false" shortDescription="texto para input-group-addon"/>
+    <composite:attribute name="uppercase" default="false"/>
+    <composite:attribute name="sConverter" default=""/>
+    <!-- AJAX ATTRIBUTES -->
+    <composite:attribute name="useAjax" default="false"/>
+    <composite:attribute name="ajaxEvent" default="blur" required="#{cc.attrs.useAjax}"/>
+    <composite:attribute name="ajaxExecute" default="@this"/>
+    <composite:attribute name="ajaxRender" default="@this"/>
+    <composite:attribute name="useAjaxListener" default="false"/>
+    <composite:attribute name="ajaxListener" method-signature="void action()" required="#{cc.attrs.useAjaxListener}"/>
+    <composite:attribute name="ajaxOnevent" default="function(data){}"/>
+</composite:interface>
+
+<composite:implementation>
+    <c:if test="#{cc.attrs.sRendered and cc.attrs.sAddon==null}">
+        <div class="form-group">
+            <h:outputLabel value="#{cc.attrs.sLabel} #{cc.attrs.sRequired?' *':''}"/>
+            <h:inputTextarea value="#{cc.attrs.value}"
+                             pt:placeholder="#{cc.attrs.placeholder}"
+                             styleClass="form-control #{cc.attrs.sStyleClass} #{cc.attrs.uppercase ? 'aquiles-uppercase' : ''}"
+                             onclick="#{cc.attrs.sOnclick}"
+                             disabled="#{cc.attrs.sDisabled}"
+                             requiredMessage="#{cc.attrs.sRequiredMessage}"
+                             required="#{cc.attrs.sRequired}"
+                             maxlength="#{cc.attrs.sMaxlength}"
+                             a:maxlength="#{cc.attrs.sMaxlength}"
+                             id="aquilesInputTextAreaNoAddon">
+                <composite:insertChildren/>
+                <c:if test="#{cc.attrs.useAjaxListener}">
+                    <f:ajax event="#{cc.attrs.ajaxEvent}"
+                            execute="#{cc.attrs.ajaxExecute}"
+                            render="#{cc.attrs.ajaxRender}"
+                            listener="#{cc.attrs.ajaxListener}"
+                            onevent="#{cc.attrs.ajaxOnevent}"
+                            disabled="#{not cc.attrs.useAjax}"/>
+                </c:if>
+                <c:if test="#{not cc.attrs.useAjaxListener}">
+                    <f:ajax event="#{cc.attrs.ajaxEvent}"
+                            execute="#{cc.attrs.ajaxExecute}"
+                            render="#{cc.attrs.ajaxRender}"
+                            onevent="#{cc.attrs.ajaxOnevent}"
+                            disabled="#{not cc.attrs.useAjax}"/>
+                </c:if>
+                <c:if test="#{not empty cc.attrs.sConverter and not cc.attrs.uppercase}">
+                    <f:converter converterId="#{cc.attrs.sConverter}"/>
+                </c:if>
+                <c:if test="#{cc.attrs.uppercase}">
+                    <f:converter converterId="omnifaces.ToUpperCaseConverter" />
+                </c:if>
+            </h:inputTextarea>
+        </div>
+    </c:if>
+    <c:if test="#{cc.attrs.sRendered and !empty cc.attrs.sAddon}">
+        <div class="form-group">
+            <h:outputLabel value="#{cc.attrs.sLabel} #{cc.attrs.sRequired?' *':''}"/>
+            <div class="input-group">
+                <span class="input-group-addon"><h:outputText value="#{cc.attrs.sAddon}"/> </span>
+                <h:inputTextarea value="#{cc.attrs.value}"
+                                 pt:placeholder="#{cc.attrs.placeholder}"
+                                 styleClass="form-control #{cc.attrs.sStyleClass} #{cc.attrs.uppercase ? 'upper-mask' : ''}"
+                                 onclick="#{cc.attrs.sOnclick}"
+                                 disabled="#{cc.attrs.sDisabled}"
+                                 requiredMessage="#{cc.attrs.sRequiredMessage}"
+                                 required="#{cc.attrs.sRequired}"
+                                 a:maxlength="#{cc.attrs.sMaxlength}"
+                                 id="aquilesInputTextAreaWithAddon">
+                    <composite:insertChildren/>
+                    <c:if test="#{cc.attrs.useAjaxListener}">
+                        <f:ajax event="#{cc.attrs.ajaxEvent}"
+                                execute="#{cc.attrs.ajaxExecute}"
+                                render="#{cc.attrs.ajaxRender}"
+                                listener="#{cc.attrs.ajaxListener}"
+                                onevent="#{cc.attrs.ajaxOnevent}"
+                                disabled="#{not cc.attrs.useAjax}"/>
+                    </c:if>
+                    <c:if test="#{not cc.attrs.useAjaxListener}">
+                        <f:ajax event="#{cc.attrs.ajaxEvent}"
+                                execute="#{cc.attrs.ajaxExecute}"
+                                render="#{cc.attrs.ajaxRender}"
+                                onevent="#{cc.attrs.ajaxOnevent}"
+                                disabled="#{not cc.attrs.useAjax}"/>
+                    </c:if>
+                    <c:if test="#{not empty cc.attrs.sConverter}">
+                        <f:converter converterId="#{cc.attrs.sConverter}"/>
+                    </c:if>
+                </h:inputTextarea>
+            </div>
+        </div>
+    </c:if>
+
+</composite:implementation>
+
+</html>

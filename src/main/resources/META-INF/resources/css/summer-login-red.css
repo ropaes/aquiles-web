@@ -1,0 +1,18 @@
+@import "aquiles.css";
+
+body {
+    background: url("#{resource['image/background-login-red.jpg']}") repeat-y !important;
+    background-repeat: no-repeat !important;
+    background-size: cover;
+}
+
+.login-box-body, .register-box-body {
+    -webkit-box-shadow: 10px 10px 5px -6px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 10px 5px -6px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 10px 5px -6px rgba(0, 0, 0, 0.75);
+}
+
+.login-logo, .register-logo {
+    font-size: 27px !important;
+    color: #ff7500;
+}

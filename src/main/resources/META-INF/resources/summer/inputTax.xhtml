@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ptf="http://xmlns.jcp.org/jsf/core">
+
+<composite:interface>
+    <composite:attribute name="sLabel" required="true"
+                         shortDescription="Label do Campo"/>
+
+    <composite:attribute name="value" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+
+    <composite:attribute name="styleClass"
+                         shortDescription="StyleClasses adicionais ao componente InputText"/>
+    <composite:attribute name="sOnclick"
+                         shortDescription="On Click"/>
+    <composite:attribute name="sDisabled" default="false"
+                         shortDescription="disable"/>
+    <composite:attribute name="sRendered" default="true" type="boolean"
+                         shortDescription="rendered"/>
+    <composite:attribute name="sRequired" default="false" type="boolean"
+                         shortDescription="required"/>
+    <composite:attribute name="sRequiredMessage"
+                         shortDescription="requiredMessage"/>
+    <composite:attribute name="placeholder"/>
+    <composite:attribute name="sHelpText" required="false"
+                         shortDescription="incluir texto de ajuda abaixo do inputText"/>
+    <composite:attribute name="sAddon" required="false" shortDescription="texto para input-group-addon"/>
+    <composite:attribute name="sPattern" required="false" shortDescription="f:convertNumber pattern"/>
+    <composite:attribute name="sMinFractionDigits" required="false"
+                         shortDescription="f:convertNumber minFractionDigits"/>
+    <composite:attribute name="sMaxFractionDigits" required="false"
+                         shortDescription="f:convertNumber maxFractionDigits"/>
+    <composite:attribute name="sMinIntegerDigits" required="false"
+                         shortDescription="f:convertNumber minIntegerDigits"/>
+    <composite:attribute name="sMaxIntegerDigits" required="false"
+                         shortDescription="f:convertNumber maxIntegerDigits"/>
+    <composite:attribute name="sAutoFocus" default="false" type="java.lang.Boolean"/>
+</composite:interface>
+
+<composite:implementation>
+    <c:if test="#{cc.attrs.sRendered}">
+        <div class="form-group">
+            <h:outputLabel value="#{cc.attrs.sLabel} #{cc.attrs.sRequired?' *':''}"/>
+            <div class="input-group">
+                <c:if test="#{!empty cc.attrs.sAddon}">
+                    <span class="input-group-addon"><h:inputText value="#{cc.attrs.sAddon}"/></span>
+                </c:if>
+                <h:inputText value="#{cc.attrs.value}"
+                             pt:placeholder="#{cc.attrs.placeholder}"
+                             styleClass="form-control #{cc.attrs.styleClass}"
+                             onclick="#{cc.attrs.sOnclick}"
+                             disabled="#{cc.attrs.sDisabled}"
+                             requiredMessage="#{cc.attrs.sRequiredMessage}"
+                             required="#{cc.attrs.sRequired}"
+                             id="aquilesInputTax">
+                    <f:convertNumber pattern="#{cc.attrs.sPattern}" minFractionDigits="#{cc.attrs.sMinFractionDigits}"
+                                     maxFractionDigits="#{cc.attrs.sMaxFractionDigits}"
+                                     minIntegerDigits="#{cc.attrs.sMinIntegerDigits}"
+                                     maxIntegerDigits="#{cc.attrs.sMinIntegerDigits}"/>
+                    <c:if test="#{cc.attrs.sAutoFocus}">
+                        <ptf:passThroughAttribute name="autofocus" value="autofocus"/>
+                    </c:if>
+                    <composite:insertChildren/>
+                </h:inputText>
+                <c:if test="#{not empty cc.attrs.sHelpText}">
+                    <p class="help-block">#{cc.attrs.sHelpText}</p>
+                </c:if>
+            </div>
+        </div>
+    </c:if>
+
+
+</composite:implementation>
+
+</html>
