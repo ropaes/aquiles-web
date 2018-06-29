@@ -1,0 +1,5 @@
+*~# Intellij IDE configuration files #
+###################################
+*.iml
+/.idea
+/target
