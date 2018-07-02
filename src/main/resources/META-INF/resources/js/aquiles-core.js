@@ -57,7 +57,7 @@ $(document).ready(function () {
     }
 
     disableAllInputsOnVisu();
-    initAquilesnote();
+    initSummernote();
 
     jsf.ajax.addOnEvent(handleAjaxEvents);
 });
@@ -221,8 +221,8 @@ function initDataTable(destroy) {
 function initSearchMenu() {
 
     var config = {
-        searchInput : ".sidebar-form .form-control",
-        menuItem    : "li.treeview"
+        searchInput: ".sidebar-form .form-control",
+        menuItem: "li.treeview"
     };
 
     $(config.searchInput).on("keyup", function () {
@@ -253,7 +253,7 @@ function handleAjaxEvents(data) {
     initSimpleDataTable();
     disableAllInputsOnVisu();
     initAutocomplete();
-    initAquilesnote();
+    initSummernote();
 }
 
 /**
@@ -303,7 +303,7 @@ function initAutocomplete() {
     }
 }
 
-function fireSearchAutoComplete(comp){
+function fireSearchAutoComplete(comp) {
     $(comp).parent().parent().find('[type=submit]').click();
     $(comp).parent().parent().find('.autocomplete-container').show(100);
 }
@@ -331,26 +331,31 @@ function clickButtonOnEnter(e) {
  * Try to click in a HTML object using 'contains' with id passed as argument
  * */
 function tryClickContainsId(containsId) {
-    if ($("[id*="+containsId+"]").length == 1) {
-        $("[id*="+containsId+"]").click();
+    if ($("[id*=" + containsId + "]").length == 1) {
+        $("[id*=" + containsId + "]").click();
     }
 }
 
 /**
- * Init the aquilesnote component used to render a wysiwyg editor
+ * Init the summernote component used to render a wysiwyg editor
  * */
-function initAquilesnote(){
-    if ($("[id*=aquilesnote_input]").length == 1) {
-        $('#aquilesnote').aquilesnote({
+function initSummernote() {
+    $('.summernote_div').each(function () {
+        $(this).summernote({
             callbacks: {
                 onInit: function () {
-                    $('#aquilesnote').aquilesnote('code', $("[id*=aquilesnote_input]").val());
+                    if ($(this).hasClass('disabledSummernote')){
+                        $(this).summernote('code', $(this).parent().next('input').val());
+                        $(this).summernote('disable');
+                    }else {
+                        $(this).summernote('code', $(this).parent().next('input').val());
+                    }
                 },
-                onChange: function(contents, $editable) {
-                    $("[id*=aquilesnote_input]").val(contents);
+                onChange: function (contents, $editable) {
+                    $(this).parent().next('input').val(contents);
                 }
             }
         });
-    }
+    });
 }
 

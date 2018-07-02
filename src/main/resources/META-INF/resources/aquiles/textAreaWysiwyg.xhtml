@@ -2,7 +2,8 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:composite="http://java.sun.com/jsf/composite" xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
 
 <composite:interface>
@@ -11,15 +12,40 @@
 
     <composite:attribute name="value" required="true"
                          shortDescription="Component value"/>
+    <composite:attribute name="aDisabled" shortDescription="Avoid editing in text area" default="false" />
 
+    <!-- AJAX ATTRIBUTES -->
+    <composite:attribute name="useAjax" default="false"/>
+    <composite:attribute name="ajaxEvent" default="blur" required="#{cc.attrs.useAjax}"/>
+    <composite:attribute name="ajaxExecute" default="@this"/>
+    <composite:attribute name="ajaxRender" default="@this"/>
+    <composite:attribute name="useAjaxListener" default="false"/>
+    <composite:attribute name="ajaxListener" method-signature="void action()" required="#{cc.attrs.useAjaxListener}"/>
+    <composite:attribute name="ajaxOnevent" default="function(data){}"/>
 </composite:interface>
 
 <composite:implementation>
     <div class="form-group">
         <label>#{cc.attrs.label}</label>
-        <div id="aquilesnote">#{cc.attrs.value}</div>
+        <div class="summernote_div #{cc.attrs.aDisabled ? 'disabledSummernote' : ''}">#{cc.attrs.value}</div>
     </div>
-    <h:inputText value="#{cc.attrs.value}" id="aquilesnote_input" style="display: none" />
+    <h:inputText value="#{cc.attrs.value}" id="summernote_input" style="display: none">
+        <c:if test="#{cc.attrs.useAjaxListener}">
+            <f:ajax event="#{cc.attrs.ajaxEvent}"
+                    execute="#{cc.attrs.ajaxExecute}"
+                    render="#{cc.attrs.ajaxRender}"
+                    listener="#{cc.attrs.ajaxListener}"
+                    onevent="#{cc.attrs.ajaxOnevent}"
+                    disabled="#{not cc.attrs.useAjax}"/>
+        </c:if>
+        <c:if test="#{not cc.attrs.useAjaxListener}">
+            <f:ajax event="#{cc.attrs.ajaxEvent}"
+                    execute="#{cc.attrs.ajaxExecute}"
+                    render="#{cc.attrs.ajaxRender}"
+                    onevent="#{cc.attrs.ajaxOnevent}"
+                    disabled="#{not cc.attrs.useAjax}"/>
+        </c:if>
+    </h:inputText>
 </composite:implementation>
 
 </html>
