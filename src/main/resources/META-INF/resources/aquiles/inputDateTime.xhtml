@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite" xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<composite:interface>
+
+    <composite:attribute name="sLabel" required="false"
+                         shortDescription="Label dp inputtext"/>
+
+    <composite:attribute name="value" required="true"
+                         shortDescription="Atributo do seu Backbean"/>
+
+    <composite:attribute name="sStyleClass"
+                         shortDescription="StyleClasses adicionais ao componente InputText"/>
+
+    <composite:attribute name="sOnclick"
+                         shortDescription="On Click"/>
+    <composite:attribute name="sDisabled" default="false"
+                         shortDescription="disable"/>
+    <composite:attribute name="sRendered" default="true"
+                         shortDescription="rendered"/>
+    <composite:attribute name="sRequired" type="boolean" default="false"
+                         shortDescription="required"/>
+    <composite:attribute name="sRequiredMessage" required="false" default="O campo #{cc.attrs.sLabel} é obrigatório"
+                         shortDescription="Require Message"/>
+
+    <!-- AJAX ATTRIBUTES -->
+    <composite:attribute name="useAjax" default="false"/>
+    <composite:attribute name="ajaxEvent" default="change" required="#{cc.attrs.useAjax}"/>
+    <composite:attribute name="ajaxExecute" default="@this"/>
+    <composite:attribute name="ajaxRender" default="@this"/>
+    <composite:attribute name="useAjaxListener" default="false"/>
+    <composite:attribute name="ajaxListener" method-signature="void action()" required="#{cc.attrs.useAjaxListener}"/>
+    <composite:attribute name="ajaxOnevent" default="function(data){}"/>
+
+</composite:interface>
+
+<composite:implementation>
+    <c:if test="#{cc.attrs.sRendered}">
+        <div class="form-group">
+            <c:if test="#{cc.attrs.sLabel!=null}">
+                <h:outputLabel value="#{cc.attrs.sLabel} #{cc.attrs.sRequired?' *':''}"/>
+            </c:if>
+            <div class="input-group">
+                <span class="input-group-addon" style="border-right: none;"><i class="fa fa-calendar text-bold"
+                                                                               aria-hidden="true"></i></span>
+                <h:inputText value="#{cc.attrs.value}"
+                             id="aquilesInputDatetime"
+                             styleClass="form-control datetime-mask datetimepicker"
+                             onclick="#{cc.attrs.sOnclick}"
+                             disabled="#{cc.attrs.sDisabled}"
+                             required="#{cc.attrs.sRequired}"
+                             requiredMessage="#{cc.attrs.sRequiredMessage}"
+                             style="border-left: none;">
+                    <f:convertDateTime type="both" pattern="dd/MM/yyyy HH:mm"/>
+                    <c:if test="#{cc.attrs.useAjaxListener}">
+                        <f:ajax event="#{cc.attrs.ajaxEvent}"
+                                execute="#{cc.attrs.ajaxExecute}"
+                                render="#{cc.attrs.ajaxRender}"
+                                listener="#{cc.attrs.ajaxListener}"
+                                onevent="#{cc.attrs.ajaxOnevent}"
+                                disabled="#{not cc.attrs.useAjax}"/>
+                    </c:if>
+                    <c:if test="#{not cc.attrs.useAjaxListener}">
+                        <f:ajax event="#{cc.attrs.ajaxEvent}"
+                                execute="#{cc.attrs.ajaxExecute}"
+                                render="#{cc.attrs.ajaxRender}"
+                                onevent="#{cc.attrs.ajaxOnevent}"
+                                disabled="#{not cc.attrs.useAjax}"/>
+                    </c:if>
+                </h:inputText>
+            </div>
+        </div>
+    </c:if>
+
+</composite:implementation>
+
+</html>

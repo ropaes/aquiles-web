@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.com.aquiles</groupId>
     <artifactId>aquiles-web</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <name>Aquiles Framework - Web</name>
 
     <properties>
